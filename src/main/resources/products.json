@@ -1,0 +1,12 @@
+[
+  {"post_id": 1, "product_id": 1, "product_name": "Silla Gamer", "type": "Gamer", "brand": "Racer", "color": "Red & Black", "notes": "Special Edition"},
+  {"post_id": 2, "product_id": 2, "product_name": "Teclado Mecánico", "type": "Teclado", "brand": "MechTech", "color": "Black", "notes": "RGB Backlit"},
+  {"post_id": 3, "product_id": 3, "product_name": "Monitor Curvo", "type": "Monitor", "brand": "ViewCurve", "color": "Silver", "notes": "Ultra-wide display"},
+  {"post_id": 4, "product_id": 4, "product_name": "Mouse Gamer", "type": "Mouse", "brand": "SwiftTech", "color": "Black", "notes": "Adjustable DPI"},
+  {"post_id": 5, "product_id": 5, "product_name": "Auriculares Inalámbricos", "type": "Auriculares", "brand": "SoundFlex", "color": "White", "notes": "Noise Cancelling"},
+  {"post_id": 6, "product_id": 6, "product_name": "Mesa para PC", "type": "Mesa", "brand": "DeskMaster", "color": "Oak", "notes": "Height adjustable"},
+  {"post_id": 7, "product_id": 7, "product_name": "Alfombrilla de Ratón", "type": "Alfombrilla", "brand": "GlidePad", "color": "Black", "notes": "Extended size"},
+  {"post_id": 8, "product_id": 8, "product_name": "Silla de Oficina", "type": "Silla", "brand": "OfficePlus", "color": "Blue", "notes": "Ergonomic design"},
+  {"post_id": 9, "product_id": 9, "product_name": "Cámara Web HD", "type": "Cámara", "brand": "WebEye", "color": "Silver", "notes": "1080p resolution"},
+  {"post_id": 10, "product_id": 10, "product_name": "Micrófono USB", "type": "Micrófono", "brand": "AudioTech", "color": "Black", "notes": "Noise reduction"}
+]

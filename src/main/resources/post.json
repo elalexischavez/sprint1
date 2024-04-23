@@ -1,0 +1,12 @@
+[
+  {"post_id": 1, "seller_id": 101, "date": "01-04-2024", "category": 105, "price": 2000.75, "has_promo": true, "discount": 0.15},
+  {"post_id": 2, "seller_id": 102, "date": "02-04-2024", "category": 110, "price": 1800.50, "has_promo": false, "discount": 0},
+  {"post_id": 3, "seller_id": 103, "date": "03-04-2024", "category": 115, "price": 2200.00, "has_promo": true, "discount": 0.20},
+  {"post_id": 4, "seller_id": 104, "date": "04-04-2024", "category": 120, "price": 1500.25, "has_promo": false, "discount": 0},
+  {"post_id": 5, "seller_id": 105, "date": "05-04-2024", "category": 125, "price": 2500.50, "has_promo": true, "discount": 0.25},
+  {"post_id": 6, "seller_id": 106, "date": "06-04-2024", "category": 130, "price": 1900.75, "has_promo": false, "discount": 0},
+  {"post_id": 7, "seller_id": 107, "date": "07-04-2024", "category": 135, "price": 2100.00, "has_promo": true, "discount": 0.10},
+  {"post_id": 8, "seller_id": 108, "date": "08-04-2024", "category": 140, "price": 1700.25, "has_promo": false, "discount": 0},
+  {"post_id": 9, "seller_id": 109, "date": "09-04-2024", "category": 145, "price": 2300.50, "has_promo": true, "discount": 0.15},
+  {"post_id": 10, "seller_id": 110, "date": "10-04-2024", "category": 150, "price": 2600.75, "has_promo": false, "discount": 0}
+]
