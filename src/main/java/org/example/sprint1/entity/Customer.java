@@ -16,5 +16,6 @@ public class Customer {
     private int userId;
     @JsonProperty("user_name")
     private String userName;
+    @JsonProperty("following")
     private List<Integer> sellers;
 }
