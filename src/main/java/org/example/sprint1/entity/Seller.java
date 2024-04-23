@@ -17,4 +17,5 @@ public class Seller {
     @JsonProperty("seller_name")
     private String sellerName;
     private List<Post> posts;
+    private List<Integer> customers;
 }

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Product {
+public class  Product {
     @JsonProperty("post_id")
     private int postId;
     @JsonProperty("product_id")

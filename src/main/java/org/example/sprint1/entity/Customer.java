@@ -6,12 +6,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Followers {
+public class Customer {
     @JsonProperty("user_id")
     private int userId;
-    @JsonProperty("seller_id")
-    private int sellerId;
+    @JsonProperty("user_name")
+    private String userName;
+    private List<Integer> sellers;
 }
