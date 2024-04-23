@@ -1,5 +1,6 @@
 package org.example.sprint1.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,7 +12,9 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Seller {
-    private int userId;
-    private String userName;
+    @JsonProperty("seller_id")
+    private int sellerId;
+    @JsonProperty("seller_name")
+    private String sellerName;
     private List<Post> posts;
 }
