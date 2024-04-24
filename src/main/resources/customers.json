@@ -2,7 +2,7 @@
   {
     "user_id": 234,
     "user_name": "Alice",
-    "following": [101, 102, 103]
+    "following": [101, 102, 103, 104]
   },
   {
     "user_id": 235,
