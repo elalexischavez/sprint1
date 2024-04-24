@@ -13,13 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class SocialMeliRepository {
+public class CustomerRepository {
     private static List<Customer> customersList = new ArrayList<>();
-    private static final List<Seller> sellersList = new ArrayList<>();
 
-    public SocialMeliRepository() throws IOException {
+    public CustomerRepository() throws IOException {
         loadCustomers();
-        loadSellers();
     }
 
     private void loadCustomers() throws IOException {
@@ -30,19 +28,8 @@ public class SocialMeliRepository {
         });
     }
 
-    private void loadSellers() throws IOException {
-        File file = ResourceUtils.getFile("classpath:sellers.json");
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.findAndRegisterModules();
-        sellersList.addAll(objectMapper.readValue(file, new TypeReference<List<Seller>>() {
-        }));
-    }
-
     public List<Customer> getCustomersList() {
+        customersList.forEach(System.out::println);
         return customersList;
-    }
-
-    public List<Seller> getSellersList() {
-        return sellersList;
     }
 }
