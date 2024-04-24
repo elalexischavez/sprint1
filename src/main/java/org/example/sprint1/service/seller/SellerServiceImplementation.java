@@ -4,11 +4,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.sprint1.dto.PostDTO;
 import org.example.sprint1.dto.RequestPostDTO;
+import org.example.sprint1.dto.ResponsePostDTO;
+import org.example.sprint1.entity.Customer;
 import org.example.sprint1.entity.Post;
 import org.example.sprint1.entity.Seller;
 import org.example.sprint1.exception.BadRequestException;
 import org.example.sprint1.exception.NotFoundException;
+import org.example.sprint1.repository.CustomerRepository;
+import org.example.sprint1.repository.ICustomerRepository;
 import org.example.sprint1.repository.SellerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +28,8 @@ import java.util.UUID;
 public class SellerServiceImplementation implements ISellerService {
     @Autowired
     SellerRepository sellerRepository;
+    @Autowired
+    ICustomerRepository customerRepository;
 
     @Override
     public Post addPost(RequestPostDTO postDTO) {
@@ -58,6 +65,17 @@ public class SellerServiceImplementation implements ISellerService {
 
     public List<Seller> getSellers(){
         return sellerRepository.getSellersList();
+    }
+
+    @Override
+    public ResponsePostDTO getPostsFromFollowingWithTwoWeeksOld(int userId) {
+        // Obtiene el customer con el userId
+        Customer customer = customerRepository.findCustomerById(userId);
+        // Obtiene una lista de post de los usuarios que sigue el customer
+        // con dos semanas de antigüedad
+        List<Post> posts = sellerRepository.findPostsByFollowing(customer.getSellers());
+
+        return new ResponsePostDTO(userId, posts);
     }
 
 }

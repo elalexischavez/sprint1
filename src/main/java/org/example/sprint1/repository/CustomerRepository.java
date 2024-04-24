@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class CustomerRepository {
+public class CustomerRepository implements ICustomerRepository {
     private static List<Customer> customersList = new ArrayList<>();
 
     public CustomerRepository() throws IOException {
@@ -26,6 +26,14 @@ public class CustomerRepository {
 
         customersList = objectMapper.readValue(file, new TypeReference<List<Customer>>() {
         });
+    }
+
+    @Override
+    public Customer findCustomerById(int id) {
+        return customersList.stream()
+                .filter(customer -> customer.getUserId() == id)
+                .findFirst()
+                .orElse(null);
     }
 
     public List<Customer> getCustomersList() {
