@@ -6,7 +6,7 @@
       {
         "post_id": 201,
         "seller_id": 101,
-        "date": "2024-04-20",
+        "date": "20-04-2024",
         "product": {
           "product_id": 301,
           "product_name": "Monitor 4K",
@@ -23,7 +23,7 @@
       {
         "post_id": 202,
         "seller_id": 101,
-        "date": "2024-04-21",
+        "date": "21-04-2021",
         "product": {
           "product_id": 302,
           "product_name": "Teclado Mecánico",
@@ -47,7 +47,7 @@
       {
         "post_id": 203,
         "seller_id": 102,
-        "date": "2024-04-22",
+        "date": "22-04-2024",
         "product": {
           "product_id": 303,
           "product_name": "Lámpara de mesa",
@@ -64,7 +64,7 @@
       {
         "post_id": 204,
         "seller_id": 102,
-        "date": "2024-04-23",
+        "date": "23-04-2024",
         "product": {
           "product_id": 304,
           "product_name": "Cojines decorativos",
@@ -88,7 +88,7 @@
       {
         "post_id": 205,
         "seller_id": 103,
-        "date": "2024-04-24",
+        "date": "24-04-2024",
         "product": {
           "product_id": 305,
           "product_name": "Cinta de correr",
@@ -105,7 +105,7 @@
       {
         "post_id": 206,
         "seller_id": 103,
-        "date": "2024-04-25",
+        "date": "25-04-2024",
         "product": {
           "product_id": 306,
           "product_name": "Mancuernas ajustables",
