@@ -1,4 +1,4 @@
-package org.example.sprint1.repository;
+package org.example.sprint1.repository.follow;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,14 +10,15 @@ import org.springframework.util.ResourceUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Repository
-public class SocialMeliRepository {
+public class FollowRepository implements IFollowRepository{
     private static List<Customer> customersList = new ArrayList<>();
     private static final List<Seller> sellersList = new ArrayList<>();
 
-    public SocialMeliRepository() throws IOException {
+    public FollowRepository() throws IOException {
         loadCustomers();
         loadSellers();
     }
@@ -38,11 +39,33 @@ public class SocialMeliRepository {
         }));
     }
 
-    public List<Customer> getCustomersList() {
-        return customersList;
-    }
 
-    public List<Seller> getSellersList() {
-        return sellersList;
+    @Override
+    public boolean userIdToFollow(int userId, int userIdToFollow) {
+
+        // verifica que el customers excita
+        List<Customer> customers = customersList.stream()
+                .filter(customer -> customer.getUserId() == userId).toList();
+
+        // verifica que el sellers excita
+        List<Seller> sellers = sellersList
+                .stream().filter(seller -> seller.getSellerId() == userIdToFollow).toList();
+
+        if(customers.isEmpty() || sellers.isEmpty()) return true;
+
+
+        //se optiene la lista para agregar el foller
+        List<Integer> followCustomers =customers.get(0).getSellers();
+        followCustomers.add(userIdToFollow);
+
+        //se optiene la lista para agregar el follwings
+        List<Integer> followSeller = sellers.get(0).getFollowers();
+        followSeller.add(userId);
+
+
+        customers.get(0).setSellers(followCustomers);
+        sellers.get(0).setFollowers(followSeller);
+
+        return false;
     }
 }

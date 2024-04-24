@@ -1,7 +1,5 @@
 package org.example.sprint1.repository.follow;
 
-import org.example.sprint1.dto.ExceptionDTO;
-
-public interface IFollowRespository {
+public interface IFollowRepository {
     boolean userIdToFollow(int userId, int userIdToFollow);
 }

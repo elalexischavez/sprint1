@@ -1,13 +1,29 @@
 package org.example.sprint1.service.follow;
 
 import org.example.sprint1.dto.ExceptionDTO;
+import org.example.sprint1.exception.BadRequestException;
+import org.example.sprint1.repository.follow.IFollowRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
 @Service
 public class FollowService implements IFollowService {
+
+    @Autowired
+    IFollowRepository followRepository;
+
+
     @Override
     public ExceptionDTO userIdToFollow(int userId, int userIdToFollow) {
-        return null;
+
+        //se optiene el resultado si existen id
+        boolean respose =  followRepository.userIdToFollow(userId, userIdToFollow);
+
+        if (respose) {
+            throw new BadRequestException("id no encontrado");
+        }
+
+        return new ExceptionDTO("follow exitoso");
     }
 }
