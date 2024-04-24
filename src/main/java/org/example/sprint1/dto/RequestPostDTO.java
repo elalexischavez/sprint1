@@ -2,15 +2,11 @@ package org.example.sprint1.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.example.sprint1.entity.Product;
-import org.springframework.core.serializer.Serializer;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -18,7 +14,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class RequestPostDTO implements Serializable {
+public class RequestPostDTO {
 
     @JsonProperty("user_id")
     @NotNull
