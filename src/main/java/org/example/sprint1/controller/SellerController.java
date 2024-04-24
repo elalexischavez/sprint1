@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("")
@@ -28,8 +29,11 @@ public class SellerController {
     }
     
     @GetMapping("/products/followed/{userId}/list")
-    public ResponseEntity<ResponsePostDTO> getPostsFromFollowingWithTwoWeeksOld(@PathVariable int userId){
-        return new ResponseEntity<>(postService.getPostsFromFollowingWithTwoWeeksOld(userId), HttpStatus.OK);
+    public ResponseEntity<ResponsePostDTO> getPostsFromFollowingWithTwoWeeksOld(
+            @PathVariable int userId,
+            @RequestParam Optional<String> order
+    ) {
+        return new ResponseEntity<>(postService.getPostsFromFollowingWithTwoWeeksOld(userId, order), HttpStatus.OK);
     }
 
 }

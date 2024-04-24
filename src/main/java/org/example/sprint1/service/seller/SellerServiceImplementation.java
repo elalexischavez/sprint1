@@ -1,6 +1,7 @@
 package org.example.sprint1.service.seller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,18 +19,20 @@ import org.example.sprint1.repository.SellerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
 public class SellerServiceImplementation implements ISellerService {
     @Autowired
     SellerRepository sellerRepository;
     @Autowired
     ICustomerRepository customerRepository;
+
+    ObjectMapper mapper = new ObjectMapper();
+
+    public SellerServiceImplementation() {
+        mapper.registerModule(new JavaTimeModule());
+    }
 
     @Override
     public Post addPost(RequestPostDTO postDTO) {
@@ -40,8 +43,6 @@ public class SellerServiceImplementation implements ISellerService {
             throw new NotFoundException("No existe un Vendedor con ese ID");
         }
 //        Crear objeto Post a partir de RequestPostDTO
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.findAndRegisterModules();
         Post post = mapper.convertValue(postDTO,Post.class);
 
 //        Revisar que el Id del producto no exista en ningun vendedor
@@ -68,14 +69,44 @@ public class SellerServiceImplementation implements ISellerService {
     }
 
     @Override
-    public ResponsePostDTO getPostsFromFollowingWithTwoWeeksOld(int userId) {
-        // Obtiene el customer con el userId
+    public ResponsePostDTO getPostsFromFollowingWithTwoWeeksOld(int userId, Optional<String> order) {
+        // Obtiene customer con userId
         Customer customer = customerRepository.findCustomerById(userId);
-        // Obtiene una lista de post de los usuarios que sigue el customer
-        // con dos semanas de antigüedad
-        List<Post> posts = sellerRepository.findPostsByFollowing(customer.getSellers());
+        if(customer == null){
+            throw new NotFoundException("No existe un cliente con ese ID");
+        }
 
-        return new ResponsePostDTO(userId, posts);
+        // Obtiene un map<idSeller, PostsDelSeller> de los usuarios que sigue el customer
+        Map<Integer, List<Post>> postsByFollowing = sellerRepository.findPostsByFollowing(customer.getSellers());
+
+        // Convierte el map en list de PostDto para poder generar un ResponsePostDTO
+        List<PostDTO> listPostDto = mappingPostToPostDto(postsByFollowing);
+
+        // Ordenamos la lista según se pida
+        if(order.isPresent() && order.get().equals("date_asc"))
+            listPostDto.sort(Comparator.comparing(PostDTO::getDate));
+        else
+            listPostDto.sort(Comparator.comparing(PostDTO::getDate).reversed());
+
+        return new ResponsePostDTO(userId, listPostDto);
     }
 
+
+    private List<PostDTO> mappingPostToPostDto(Map<Integer, List<Post>> posts) {
+        List<PostDTO> listPostDto = new ArrayList<>();
+
+        for (Map.Entry<Integer, List<Post>> entry : posts.entrySet()) {
+            // Mapea Post -> PostDTO y se agrega a una list de PostDTO
+            listPostDto.addAll(
+                    entry.getValue().stream()
+                            .map(v -> mapper.convertValue(v, PostDTO.class))
+                            .toList()
+            );
+
+            // A cada elemento de la lista se le asigna el id del seller que hizo la publicación
+            listPostDto.forEach(post -> post.setSellerId(entry.getKey()));
+        }
+
+        return listPostDto;
+    }
 }
