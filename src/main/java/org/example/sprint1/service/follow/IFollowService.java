@@ -4,5 +4,5 @@ import org.example.sprint1.dto.ExceptionDTO;
 import org.springframework.web.bind.annotation.PathVariable;
 
 public interface IFollowService {
-    ExceptionDTO userIdToFollow(int userId,int userIdToFollow);
+    void userIdToFollow(int userId,int userIdToFollow);
 }

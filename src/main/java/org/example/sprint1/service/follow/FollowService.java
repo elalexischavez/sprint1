@@ -15,7 +15,7 @@ public class FollowService implements IFollowService {
 
 
     @Override
-    public ExceptionDTO userIdToFollow(int userId, int userIdToFollow) {
+    public void userIdToFollow(int userId, int userIdToFollow) {
 
         //se optiene el resultado si existen id
         boolean respose =  followRepository.userIdToFollow(userId, userIdToFollow);
@@ -23,7 +23,5 @@ public class FollowService implements IFollowService {
         if (respose) {
             throw new BadRequestException("id no encontrado");
         }
-
-        return new ExceptionDTO("follow exitoso");
     }
 }

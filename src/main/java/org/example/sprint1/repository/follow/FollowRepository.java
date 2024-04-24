@@ -62,7 +62,7 @@ public class FollowRepository implements IFollowRepository{
         List<Integer> followSeller = sellers.get(0).getFollowers();
         followSeller.add(userId);
 
-
+        // se agrega lista actualizada
         customers.get(0).setSellers(followCustomers);
         sellers.get(0).setFollowers(followSeller);
 
