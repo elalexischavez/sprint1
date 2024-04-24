@@ -39,6 +39,6 @@ public class CustomerRepository {
         return customersList.stream()
                 .filter(customer -> customer.getUserId() == id)
                 .findFirst()
-                .orElseThrow(() -> new NoSuchElementException("No customer found with ID: " + id));
+                .orElseThrow(() -> new NoSuchElementException("No customer with ID  : " + id));
     }
 }

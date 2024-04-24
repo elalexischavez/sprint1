@@ -27,6 +27,7 @@ public class FollowService implements IFollowService {
     @Override
     public FollowedSellersDTO getFollowedSellers(int userId){
         ObjectMapper mapper = new ObjectMapper();
+        mapper.findAndRegisterModules();
         Customer customer  =  customerRepository.getCustomerById(userId);
         return new FollowedSellersDTO(userId, customer.getUserName(),
                 sellerRepository.getCustomersThatFollowsSellersById(userId)

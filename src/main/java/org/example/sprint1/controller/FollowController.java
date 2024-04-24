@@ -22,7 +22,7 @@ public class FollowController {
     }
 
     @GetMapping("/users/{userId}/followed/list")
-    public ResponseEntity<FollowedSellersDTO> getSellerFollowers(@PathVariable int userId) {
+    public ResponseEntity<FollowedSellersDTO> getFollowedSellers(@PathVariable int userId) {
         return new ResponseEntity<>(followService.getFollowedSellers(userId), HttpStatus.OK);
     }
 }
