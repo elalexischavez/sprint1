@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface IFollowService {
     ExceptionDTO userIdToFollow(int userId,int userIdToFollow);
-    SellerFollowerDto getSellerFollowers(int userId);
+
+    SellerFollowerDto getSellerFollowers(int userId, String order);
 }
