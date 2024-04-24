@@ -17,7 +17,8 @@ public class FollowController {
 
     @PostMapping("/users/{userId}/follow/{userIdToFollow}")
     ResponseEntity<?> userIdToFollow(@PathVariable int userId, @PathVariable int userIdToFollow) {
-        return new ResponseEntity<>(followService.userIdToFollow(userId, userIdToFollow), HttpStatus.OK);
+        followService.userIdToFollow(userId, userIdToFollow);
+        return new ResponseEntity<>("follow excitoso" , HttpStatus.OK);
     }
     @GetMapping("/users/{userId}/followers/count")
     ResponseEntity<?> countFollowers(@PathVariable int userId) {

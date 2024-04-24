@@ -5,7 +5,7 @@ import org.example.sprint1.entity.Customer;
 import org.springframework.web.bind.annotation.PathVariable;
 
 public interface IFollowService {
-    ExceptionDTO userIdToFollow(int userId,int userIdToFollow);
+    void userIdToFollow(int userId,int userIdToFollow);
     int countFollowers(int sellerId);
 
     ExceptionDTO unfollowSeller(int userId, int userIdToUnfollow);
