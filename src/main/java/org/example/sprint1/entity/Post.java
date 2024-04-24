@@ -16,6 +16,8 @@ import java.time.LocalDate;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonPropertyOrder({"postId", "date", "product", "category", "price", "hasPromo", "discount"})
 public class Post {
+    @JsonProperty("post_id")
+    private int postId;
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDate date;
     private Product product;

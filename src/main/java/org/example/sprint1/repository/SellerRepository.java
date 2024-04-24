@@ -41,4 +41,9 @@ public class SellerRepository {
         return sellersList.stream()
                 .anyMatch(seller -> seller.productIdExists(id));
     }
+
+    public boolean postIdExist(int id){
+        return sellersList.stream().anyMatch(seller -> seller.getPosts()
+                .stream().anyMatch(post -> post.getPostId() == id));
+    }
 }
