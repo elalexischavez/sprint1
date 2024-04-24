@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -37,10 +38,16 @@ public class SellerServiceImplementation implements ISellerService {
         Post post = mapper.convertValue(postDTO,Post.class);
 
 //        Revisar que el Id del producto no exista en ningun vendedor
-
         boolean idExists = sellerRepository.productIdExists(post.getProduct().getProductId());
         if(idExists){
             throw new BadRequestException("El ID del producto ya existe");
+        }
+
+//        Asignar un Post ID
+        int uuid = Math.abs(UUID.randomUUID().hashCode());
+        post.setPostId(uuid);
+        if (sellerRepository.postIdExist(post.getPostId())){
+            throw new BadRequestException("El ID de la publicacion ya existe");
         }
 
 //        Agregar post al listado de sellers
