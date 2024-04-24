@@ -44,27 +44,27 @@ public class FollowRepository implements IFollowRepository{
     public boolean userIdToFollow(int userId, int userIdToFollow) {
 
         // verifica que el customers excita
-        List<Customer> customers = customersList.stream()
-                .filter(customer -> customer.getUserId() == userId).toList();
+        Customer customer = customersList.stream()
+                .filter(value -> value.getUserId() == userId).findAny().orElse(null);
 
         // verifica que el sellers excita
-        List<Seller> sellers = sellersList
-                .stream().filter(seller -> seller.getSellerId() == userIdToFollow).toList();
+        Seller seller = sellersList
+                .stream().filter(value -> value.getSellerId() == userIdToFollow).findAny().orElse(null);
 
-        if(customers.isEmpty() || sellers.isEmpty()) return true;
+        if(customer == null || seller == null ) return true;
 
 
         //se optiene la lista para agregar el foller
-        List<Integer> followCustomers =customers.get(0).getSellers();
+        List<Integer> followCustomers =customer.getSellers();
         followCustomers.add(userIdToFollow);
 
         //se optiene la lista para agregar el follwings
-        List<Integer> followSeller = sellers.get(0).getFollowers();
+        List<Integer> followSeller = seller.getFollowers();
         followSeller.add(userId);
 
         // se agrega lista actualizada
-        customers.get(0).setSellers(followCustomers);
-        sellers.get(0).setFollowers(followSeller);
+        customer.setSellers(followCustomers);
+        seller.setFollowers(followSeller);
 
         return false;
     }
