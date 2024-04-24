@@ -46,4 +46,10 @@ public class SellerRepository {
         return sellersList.stream().anyMatch(seller -> seller.getPosts()
                 .stream().anyMatch(post -> post.getPostId() == id));
     }
+
+    public List<Seller> getCustomersThatFollowsSellersById(int id) {
+        return  sellersList.stream()
+                .filter( v -> v.getFollowers().contains(id))
+                .toList();
+    }
 }

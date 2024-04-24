@@ -11,6 +11,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Repository
 public class CustomerRepository {
@@ -31,5 +33,12 @@ public class CustomerRepository {
     public List<Customer> getCustomersList() {
         customersList.forEach(System.out::println);
         return customersList;
+    }
+
+    public Customer getCustomerById(int id) {
+        return customersList.stream()
+                .filter(customer -> customer.getUserId() == id)
+                .findFirst()
+                .orElseThrow(() -> new NoSuchElementException("No customer found with ID: " + id));
     }
 }
