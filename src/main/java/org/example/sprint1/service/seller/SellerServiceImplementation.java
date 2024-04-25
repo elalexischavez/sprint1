@@ -28,6 +28,7 @@ public class SellerServiceImplementation implements ISellerService {
     @Autowired
     ICustomerRepository customerRepository;
 
+
     ObjectMapper mapper = new ObjectMapper();
 
     public SellerServiceImplementation() {

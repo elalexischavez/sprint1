@@ -5,7 +5,6 @@ import org.example.sprint1.dto.BasicCustomerDto;
 import org.example.sprint1.dto.BasicSellerDTO;
 import org.example.sprint1.dto.ExceptionDTO;
 import org.example.sprint1.exception.BadRequestException;
-import org.example.sprint1.repository.follow.IFollowRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.example.sprint1.entity.Customer;
 import org.example.sprint1.entity.Seller;
@@ -27,8 +26,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class FollowService implements IFollowService {
-    @Autowired
-    IFollowRepository followRepository;
+
     @Autowired
     CustomerRepository customerRepository;
     @Autowired
@@ -38,9 +36,10 @@ public class FollowService implements IFollowService {
     @Override
     public void userIdToFollow(int userId, int userIdToFollow) {
         //se optiene el resultado si existen id
-        boolean respose =  followRepository.userIdToFollow(userId, userIdToFollow);
+        boolean cusomerResult = customerRepository.userIdToFollowCustomer(userId, userIdToFollow);
+        boolean sellerResult = sellerRepository.userIdToFollowSeller(userId, userIdToFollow);
 
-        if (respose) {
+        if (sellerResult || cusomerResult) {
             throw new BadRequestException("id no encontrado");
         }
     }
@@ -54,6 +53,7 @@ public class FollowService implements IFollowService {
         }
         return seller.getFollowers().size();
     }
+
 
     @Override
     public ExceptionDTO unfollowSeller(int userId, int userIdToFollow) {
