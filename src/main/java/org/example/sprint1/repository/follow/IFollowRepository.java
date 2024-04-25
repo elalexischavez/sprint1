@@ -4,6 +4,6 @@ import org.example.sprint1.entity.Seller;
 
 public interface IFollowRepository {
     boolean userIdToFollow(int userId, int userIdToFollow);
-    Seller  countFollowers(int sellerId);
 
+    Seller  countFollowers(int sellerId);
 }

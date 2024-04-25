@@ -1,6 +1,7 @@
 package org.example.sprint1.controller;
 
 import org.example.sprint1.dto.SellerFollowerDto;
+import org.example.sprint1.dto.FollowedSellersDTO;
 import org.example.sprint1.service.follow.IFollowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,5 +32,10 @@ public class FollowController {
     @GetMapping("/users/{userId}/followers/list")
     public ResponseEntity<SellerFollowerDto> getSellerFollowers(@PathVariable int userId, @RequestParam(required = false) String order) {
         return new ResponseEntity<>(followService.getSellerFollowers(userId, order), HttpStatus.OK);
+    }
+
+    @GetMapping("/users/{userId}/followed/list")
+    public ResponseEntity<FollowedSellersDTO> getFollowedSellers(@PathVariable int userId, @RequestParam(required = false) String order){
+        return new ResponseEntity<>(followService.getFollowedSellers(userId, order), HttpStatus.OK);
     }
 }

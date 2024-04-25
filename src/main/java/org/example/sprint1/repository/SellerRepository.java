@@ -90,4 +90,10 @@ public class SellerRepository implements ISellerRepository {
                 )
                 .toList();
     }
+
+    public List<Seller> getCustomersThatFollowsSellersById(int id) {
+        return  sellersList.stream()
+                .filter( v -> v.getFollowers().contains(id))
+                .toList();
+    }
 }

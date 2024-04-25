@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Repository
 public class CustomerRepository implements ICustomerRepository {
@@ -45,5 +46,12 @@ public class CustomerRepository implements ICustomerRepository {
         return  customersList.stream()
                 .filter( v -> v.getSellers().contains(id))
                 .toList();
+    }
+
+    public Customer getCustomerById(int id) {
+        return customersList.stream()
+                .filter(customer -> customer.getUserId() == id)
+                .findFirst()
+                .orElseThrow(() -> new NoSuchElementException("No customer with ID  : " + id));
     }
 }

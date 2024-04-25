@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 @Repository
-public class FollowRepository implements IFollowRepository{
+public class FollowRepository implements IFollowRepository {
     @Override
     public boolean userIdToFollow(int userId, int userIdToFollow) {
         return false;
