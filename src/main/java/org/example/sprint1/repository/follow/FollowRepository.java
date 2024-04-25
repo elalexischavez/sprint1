@@ -1,6 +1,6 @@
 package org.example.sprint1.repository.follow;
 
-public class FollowRespository implements IFollowRespository{
+public class FollowRepository implements IFollowRepository {
     @Override
     public boolean userIdToFollow(int userId, int userIdToFollow) {
         return false;
