@@ -6,6 +6,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 public interface IFollowService {
     ExceptionDTO userIdToFollow(int userId,int userIdToFollow);
-    FollowedSellersDTO getFollowedSellers(int userId);
+    FollowedSellersDTO getFollowedSellers(int userId, String order);
 
 }
