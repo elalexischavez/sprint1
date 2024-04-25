@@ -4,8 +4,9 @@ import org.example.sprint1.entity.Post;
 import org.example.sprint1.entity.Seller;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ISellerRepository {
-    List<Post> findPostsByFollowing(List<Integer> sellers);
     public Seller getSellerById(int id);
+    Map<Integer, List<Post>> findPostsByFollowing(List<Integer> sellers);
 }

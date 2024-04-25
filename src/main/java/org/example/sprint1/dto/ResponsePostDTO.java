@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import org.example.sprint1.entity.Post;
 
 import java.util.List;
 
@@ -16,7 +15,7 @@ import java.util.List;
 public class ResponsePostDTO {
     @JsonProperty("user_id")
     private int userId;
-    @JsonSerialize(contentAs = Post.class)
-    @JsonDeserialize(contentAs = Post.class)
-    private List<Post> posts;
+    @JsonSerialize(contentAs = PostDTO.class)
+    @JsonDeserialize(contentAs = PostDTO.class)
+    private List<PostDTO> posts;
 }

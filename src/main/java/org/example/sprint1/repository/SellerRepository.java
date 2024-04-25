@@ -11,8 +11,8 @@ import org.springframework.util.ResourceUtils;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.*;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 @Data
@@ -54,9 +54,9 @@ public class SellerRepository implements ISellerRepository {
     }
 
     @Override
-    public List<Post> findPostsByFollowing(List<Integer> sellers) {
+    public Map<Integer, List<Post>> findPostsByFollowing(List<Integer> sellers) {
         List<Seller> sellersMatch = new ArrayList<>();
-        List<Post> postsMatch = new ArrayList<>();
+        Map<Integer, List<Post>> postsMatch = new HashMap<>();
 
         // Obtenemos cada seller que el customer sigue
         for (Integer sellerId : sellers) {
@@ -65,11 +65,14 @@ public class SellerRepository implements ISellerRepository {
 
         // Agregamos a una lista todos los post que cumplen con las especificaciones
         for(Seller seller : sellersMatch) {
-            postsMatch.addAll(findPostsWithTwoWeeksOld(seller.getPosts()));
+            postsMatch.put(
+                    seller.getSellerId(),
+                    findPostsWithTwoWeeksOld(seller.getPosts())
+            );
         }
 
         // Ordenar la lista de posts por fecha de manera descendente
-        postsMatch.sort(Comparator.comparing(Post::getDate).reversed());
+//        postsMatch.sort(Comparator.comparing(Post::getDate).reversed());
 
         return postsMatch;
     }
