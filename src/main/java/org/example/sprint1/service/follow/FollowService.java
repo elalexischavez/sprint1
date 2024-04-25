@@ -48,7 +48,7 @@ public class FollowService implements IFollowService {
 
     @Override
     public int countFollowers(int sellerId) {
-        Seller seller = followRepository.countFollowers(sellerId);
+        Seller seller = sellerRepository.getSellerById(sellerId);
         if(seller == null){
             throw new NotFoundException("Vendedor no encontrado");
         }

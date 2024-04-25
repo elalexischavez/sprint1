@@ -13,13 +13,4 @@ public class FollowRepository implements IFollowRepository {
         return false;
     }
 
-    @Override
-    public Seller countFollowers(int sellerId) {
-        List<Seller> sellers = new ArrayList<>();
-        return sellers.stream()
-                .filter(v -> v.getSellerId() == sellerId)
-                .findFirst()
-                .orElse( null);
-    }
-
 }
