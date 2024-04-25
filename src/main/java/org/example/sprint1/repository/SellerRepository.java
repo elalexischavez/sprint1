@@ -54,6 +54,23 @@ public class SellerRepository implements ISellerRepository {
     }
 
     @Override
+    public boolean userIdToFollowSeller(int userId, int userIdToFollow) {
+
+        //se busca el id
+        Seller seller = sellersList.stream().filter(value -> value.getSellerId() == userIdToFollow)
+                .findFirst().orElse(null);
+
+        //regresa true si se encuentra id
+        if(seller == null) return true;
+
+        //se agrega id
+        seller.addFollowers(userId);
+
+        return false;
+
+    }
+
+    @Override
     public Map<Integer, List<Post>> findPostsByFollowing(List<Integer> sellers) {
         List<Seller> sellersMatch = new ArrayList<>();
         Map<Integer, List<Post>> postsMatch = new HashMap<>();

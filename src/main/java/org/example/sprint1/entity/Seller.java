@@ -28,4 +28,8 @@ public class Seller {
     public boolean productIdExists(int id){
         return posts.stream().anyMatch(post -> post.getProduct().getProductId() == id);
     }
+
+    public void addFollowers(int id){
+        followers.add(id);
+    }
 }

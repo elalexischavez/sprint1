@@ -37,6 +37,26 @@ public class CustomerRepository implements ICustomerRepository {
     }
 
     @Override
+    public boolean userIdToFollowCustomer(int userId, int userIdToFollow) {
+
+        //se busca el id
+        Customer customer = customersList.stream()
+                .filter(value -> value.getUserId() == userId).findFirst().orElse(null);
+
+        if (customer == null) return true;
+
+        //regresa true si se encuentra id
+        customer.addSeller(userIdToFollow);
+
+        return false;
+    }
+
+    public List<Customer> getCustomersList() {
+        customersList.forEach(System.out::println);
+        return customersList;
+    }
+
+    @Override
     public List<Customer> getCustomersThatFollowsSellersById(int id) {
         return  customersList.stream()
                 .filter( v -> v.getSellers().contains(id))
