@@ -26,7 +26,8 @@ public class FollowController {
 
     @PostMapping("/users/{userId}/unfollow/{userIdToUnfollow}")
     ResponseEntity<?> unfollowSeller(@PathVariable int userId,@PathVariable int userIdToUnfollow) {
-        return new ResponseEntity<>(followService.unfollowSeller(userId,userIdToUnfollow), HttpStatus.OK);
+        followService.unfollowSeller(userId,userIdToUnfollow);
+        return new ResponseEntity<>("", HttpStatus.OK);
     }
 
     @GetMapping("/users/{userId}/followers/list")

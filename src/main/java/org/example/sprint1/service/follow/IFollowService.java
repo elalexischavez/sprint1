@@ -9,7 +9,7 @@ public interface IFollowService {
 
     int countFollowers(int sellerId);
 
-    ExceptionDTO unfollowSeller(int userId, int userIdToUnfollow);
+    void unfollowSeller(int userId, int userIdToUnfollow);
 
     SellerFollowerDto getSellerFollowers(int userId, String order);
 
