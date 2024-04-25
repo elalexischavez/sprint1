@@ -94,7 +94,9 @@ public class FollowService implements IFollowService {
     public FollowedSellersDTO getFollowedSellers(int userId, String order) {
         ObjectMapper mapper = new ObjectMapper();
         mapper.findAndRegisterModules();
-        Customer customer  =  customerRepository.getCustomerById(userId);
+        Customer customer  =  customerRepository.findCustomerById(userId);
+        if(customer == null) throw new NotFoundException("Usuario no encontrado");
+
         List<BasicSellerDTO> sellers = sellerRepository.getCustomersThatFollowsSellersById(userId)
                 .stream().map( v -> mapper.convertValue(v, BasicSellerDTO.class)).collect(Collectors.toList());
 

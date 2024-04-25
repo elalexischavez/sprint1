@@ -36,22 +36,10 @@ public class CustomerRepository implements ICustomerRepository {
                 .orElse(null);
     }
 
-    public List<Customer> getCustomersList() {
-        customersList.forEach(System.out::println);
-        return customersList;
-    }
-
     @Override
     public List<Customer> getCustomersThatFollowsSellersById(int id) {
         return  customersList.stream()
                 .filter( v -> v.getSellers().contains(id))
                 .toList();
-    }
-
-    public Customer getCustomerById(int id) {
-        return customersList.stream()
-                .filter(customer -> customer.getUserId() == id)
-                .findFirst()
-                .orElseThrow(() -> new NoSuchElementException("No customer with ID  : " + id));
     }
 }
