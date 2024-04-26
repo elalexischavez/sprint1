@@ -17,14 +17,14 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("")
+@RequestMapping("/products")
 public class SellerController {
 
     @Autowired
     ISellerService postService;
 
     @Validated
-    @PostMapping("/products/post")
+    @PostMapping("/post")
     public ResponseEntity<Void> addPost(@Valid @RequestBody RequestPostDTO postDTO, BindingResult result){
         if(result.hasErrors()){
             throw new BadRequestException("Bad Request");
@@ -32,15 +32,15 @@ public class SellerController {
         postService.addPost(postDTO);
         return ResponseEntity.ok().build();
     }
-    @GetMapping("/products/list")
+    @GetMapping("/list")
     public ResponseEntity<List<Seller>> getAllSellers(){
         return new ResponseEntity<>(postService.getSellers(), HttpStatus.OK);
     }
 
-    @GetMapping("/products/followed/{userId}/list")
+    @GetMapping("/followed/{userId}/list")
     public ResponseEntity<ResponsePostDTO> getPostsFromFollowingWithTwoWeeksOld(
             @PathVariable int userId,
-            @RequestParam Optional<String> order
+            @RequestParam(required = false) String order
     ) {
         return new ResponseEntity<>(postService.getPostsFromFollowingWithTwoWeeksOld(userId, order), HttpStatus.OK);
     }

@@ -9,32 +9,34 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/users")
 public class FollowController {
 
     @Autowired
     IFollowService followService;
 
-    @PostMapping("/users/{userId}/follow/{userIdToFollow}")
+    @PostMapping("/{userId}/follow/{userIdToFollow}")
     ResponseEntity<?> userIdToFollow(@PathVariable int userId, @PathVariable int userIdToFollow) {
         followService.userIdToFollow(userId, userIdToFollow);
         return new ResponseEntity<>("follow exitoso" , HttpStatus.OK);
     }
-    @GetMapping("/users/{userId}/followers/count")
+    @GetMapping("/{userId}/followers/count")
     ResponseEntity<?> countFollowers(@PathVariable int userId) {
         return new ResponseEntity<>(followService.countFollowers(userId), HttpStatus.OK);
     }
 
-    @PostMapping("/users/{userId}/unfollow/{userIdToUnfollow}")
+    @PostMapping("/{userId}/unfollow/{userIdToUnfollow}")
     ResponseEntity<?> unfollowSeller(@PathVariable int userId,@PathVariable int userIdToUnfollow) {
-        return new ResponseEntity<>(followService.unfollowSeller(userId,userIdToUnfollow), HttpStatus.OK);
+        followService.unfollowSeller(userId,userIdToUnfollow);
+        return new ResponseEntity<>("", HttpStatus.OK);
     }
 
-    @GetMapping("/users/{userId}/followers/list")
+    @GetMapping("/{userId}/followers/list")
     public ResponseEntity<SellerFollowerDto> getSellerFollowers(@PathVariable int userId, @RequestParam(required = false) String order) {
         return new ResponseEntity<>(followService.getSellerFollowers(userId, order), HttpStatus.OK);
     }
 
-    @GetMapping("/users/{userId}/followed/list")
+    @GetMapping("/{userId}/followed/list")
     public ResponseEntity<FollowedSellersDTO> getFollowedSellers(@PathVariable int userId, @RequestParam(required = false) String order){
         return new ResponseEntity<>(followService.getFollowedSellers(userId, order), HttpStatus.OK);
     }

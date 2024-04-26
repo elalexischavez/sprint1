@@ -18,4 +18,8 @@ public class Customer {
     private String userName;
     @JsonProperty("following")
     private List<Integer> sellers;
+
+    public void addSeller(int sellerId) {
+        sellers.add(sellerId);
+    }
 }
