@@ -11,5 +11,5 @@ import java.util.Optional;
 public interface ISellerService {
      public Post addPost(RequestPostDTO postDTO);
      public List<Seller> getSellers();
-     ResponsePostDTO getPostsFromFollowingWithTwoWeeksOld(int userId, Optional<String> order);
+     ResponsePostDTO getPostsFromFollowingWithTwoWeeksOld(int userId, String order);
 }

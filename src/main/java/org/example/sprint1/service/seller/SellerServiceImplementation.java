@@ -24,6 +24,7 @@ public class SellerServiceImplementation implements ISellerService {
     @Autowired
     ICustomerRepository customerRepository;
 
+    private final static String ORDER_ASC = "date_asc";
 
     ObjectMapper mapper = new ObjectMapper();
 
@@ -66,7 +67,7 @@ public class SellerServiceImplementation implements ISellerService {
     }
 
     @Override
-    public ResponsePostDTO getPostsFromFollowingWithTwoWeeksOld(int userId, Optional<String> order) {
+    public ResponsePostDTO getPostsFromFollowingWithTwoWeeksOld(int userId, String order) {
         // Obtiene customer con userId
         Customer customer = customerRepository.findCustomerById(userId);
         if(customer == null){
@@ -79,8 +80,8 @@ public class SellerServiceImplementation implements ISellerService {
         // Convierte el map en list de PostDto para poder generar un ResponsePostDTO
         List<PostDTO> listPostDto = mappingPostToPostDto(postsByFollowing);
 
-        // Ordenamos la lista según se pida
-        if(order.isPresent() && order.get().equals("date_asc"))
+        // Ordenamos la lista según el query param
+        if(ORDER_ASC.equals(order))
             listPostDto.sort(Comparator.comparing(PostDTO::getDate));
         else
             listPostDto.sort(Comparator.comparing(PostDTO::getDate).reversed());
@@ -93,7 +94,7 @@ public class SellerServiceImplementation implements ISellerService {
         List<PostDTO> listPostDto = new ArrayList<>();
 
         for (Map.Entry<Integer, List<Post>> entry : posts.entrySet()) {
-            // Mapea Post -> PostDTO y se agrega a una list de PostDTO
+            // Mapea Post -> PostDTO y agrega un idSeller
             listPostDto.addAll(
                     entry.getValue().stream()
                             .map(v -> {
