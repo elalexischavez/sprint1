@@ -40,4 +40,6 @@ public class FollowController {
     public ResponseEntity<FollowedSellersDTO> getFollowedSellers(@PathVariable int userId, @RequestParam(required = false) String order){
         return new ResponseEntity<>(followService.getFollowedSellers(userId, order), HttpStatus.OK);
     }
+
+
 }

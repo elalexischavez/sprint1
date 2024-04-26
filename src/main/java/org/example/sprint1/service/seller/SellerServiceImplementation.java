@@ -2,9 +2,7 @@ package org.example.sprint1.service.seller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.example.sprint1.dto.PostDTO;
-import org.example.sprint1.dto.RequestPostDTO;
-import org.example.sprint1.dto.ResponsePostDTO;
+import org.example.sprint1.dto.*;
 import org.example.sprint1.entity.Customer;
 import org.example.sprint1.entity.Post;
 import org.example.sprint1.entity.Seller;
@@ -34,36 +32,40 @@ public class SellerServiceImplementation implements ISellerService {
 
     @Override
     public Post addPost(RequestPostDTO postDTO) {
+        return createAndAddPost(postDTO, false);
+    }
 
-//        Revisar si existe el Usuario
-        Seller seller = sellerRepository.getSellerById(postDTO.getUserId());
+    @Override
+    public Post addPost(RequestPromoPostDTO postDTO){
+        return createAndAddPost(postDTO, true);
+    }
+
+    public List<Seller> getSellers(){
+        return sellerRepository.getSellersList();
+    }
+
+    private Post createAndAddPost(Object requestDTO, boolean isPromo) {
+        int userId = isPromo ? ((RequestPromoPostDTO) requestDTO).getUserId() : ((RequestPostDTO) requestDTO).getUserId();
+        Seller seller = sellerRepository.getSellerById(userId);
         if (seller == null) {
             throw new NotFoundException("No existe un Vendedor con ese ID");
         }
-//        Crear objeto Post a partir de RequestPostDTO
-        Post post = mapper.convertValue(postDTO,Post.class);
 
-//        Revisar que el Id del producto no exista en ningun vendedor
+        Post post = mapper.convertValue(requestDTO, Post.class);
+
         boolean idExists = sellerRepository.productIdExists(post.getProduct().getProductId());
         if(idExists){
             throw new BadRequestException("El ID del producto ya existe");
         }
 
-//        Asignar un Post ID
         int uuid = Math.abs(UUID.randomUUID().hashCode());
         post.setPostId(uuid);
         if (sellerRepository.postIdExist(post.getPostId())){
             throw new BadRequestException("El ID de la publicacion ya existe");
         }
 
-//        Agregar post al listado de sellers
         seller.getPosts().add(post);
-
         return post;
-    }
-
-    public List<Seller> getSellers(){
-        return sellerRepository.getSellersList();
     }
 
     @Override
@@ -107,5 +109,18 @@ public class SellerServiceImplementation implements ISellerService {
         }
 
         return listPostDto;
+    }
+
+    @Override
+    public CountPromoPostsDTO countPromoPosts(int userId){
+        Seller seller = sellerRepository.getSellerById(userId);
+        if(seller == null){
+            throw new NotFoundException("Vendedor no encontrado");
+        }
+        int promoProductsCount = (int) seller.getPosts().stream()
+                .filter(Post::isHasPromo)
+                .count();
+
+        return new CountPromoPostsDTO(userId, seller.getSellerName(), promoProductsCount);
     }
 }
