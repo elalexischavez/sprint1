@@ -2,9 +2,6 @@ package org.example.sprint1.service.seller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.example.sprint1.dto.PostDTO;
 import org.example.sprint1.dto.RequestPostDTO;
 import org.example.sprint1.dto.ResponsePostDTO;
@@ -13,10 +10,8 @@ import org.example.sprint1.entity.Post;
 import org.example.sprint1.entity.Seller;
 import org.example.sprint1.exception.BadRequestException;
 import org.example.sprint1.exception.NotFoundException;
-import org.example.sprint1.repository.CustomerRepository;
 import org.example.sprint1.repository.ICustomerRepository;
 import org.example.sprint1.repository.ISellerRepository;
-import org.example.sprint1.repository.SellerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +35,7 @@ public class SellerServiceImplementation implements ISellerService {
     public Post addPost(RequestPostDTO postDTO) {
 
 //        Revisar si existe el Usuario
-        Seller seller = sellerRepository.filterSellerById(postDTO.getUserId());
+        Seller seller = sellerRepository.getSellerById(postDTO.getUserId());
         if (seller == null) {
             throw new NotFoundException("No existe un Vendedor con ese ID");
         }

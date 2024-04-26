@@ -38,17 +38,11 @@ public class SellerRepository implements ISellerRepository {
     }
 
     @Override
-    public Seller filterSellerById(int id){
-        return sellersList.stream().filter(seller -> seller.getSellerId() == id)
-                .findFirst()
-                .orElse(null);
-    }
-
-    @Override
     public boolean productIdExists(int id) {
         return sellersList.stream()
                 .anyMatch(seller -> seller.productIdExists(id));
     }
+
 
     @Override
     public Seller getSellerById(int id) {
@@ -85,7 +79,7 @@ public class SellerRepository implements ISellerRepository {
 
         // Obtenemos cada seller que el customer sigue
         for (Integer sellerId : sellers) {
-            sellersMatch.add(filterSellerById(sellerId));
+            sellersMatch.add(getSellerById(sellerId));
         }
 
         // Agregamos a una lista todos los post que cumplen con las especificaciones

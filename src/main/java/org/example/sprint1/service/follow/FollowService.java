@@ -3,7 +3,6 @@ package org.example.sprint1.service.follow;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.sprint1.dto.BasicCustomerDto;
 import org.example.sprint1.dto.BasicSellerDTO;
-import org.example.sprint1.dto.ExceptionDTO;
 import org.example.sprint1.exception.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.example.sprint1.entity.Customer;
@@ -14,13 +13,9 @@ import org.example.sprint1.repository.CustomerRepository;
 import org.example.sprint1.repository.SellerRepository;
 import org.example.sprint1.dto.FollowedSellersDTO;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 import java.util.List;
-
 import java.util.Comparator;
 import java.util.stream.Stream;
-
 import java.util.stream.Collectors;
 
 
@@ -35,7 +30,7 @@ public class FollowService implements IFollowService {
 
     @Override
     public void userIdToFollow(int userId, int userIdToFollow) {
-        //se optiene el resultado si existen id
+        // se optiene el resultado si existen id
         boolean cusomerResult = customerRepository.userIdToFollowCustomer(userId, userIdToFollow);
         boolean sellerResult = sellerRepository.userIdToFollowSeller(userId, userIdToFollow);
 
