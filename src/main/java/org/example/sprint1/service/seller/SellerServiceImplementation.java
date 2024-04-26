@@ -15,6 +15,7 @@ import org.example.sprint1.exception.BadRequestException;
 import org.example.sprint1.exception.NotFoundException;
 import org.example.sprint1.repository.CustomerRepository;
 import org.example.sprint1.repository.ICustomerRepository;
+import org.example.sprint1.repository.ISellerRepository;
 import org.example.sprint1.repository.SellerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ import java.util.*;
 @Service
 public class SellerServiceImplementation implements ISellerService {
     @Autowired
-    SellerRepository sellerRepository;
+    ISellerRepository sellerRepository;
     @Autowired
     ICustomerRepository customerRepository;
 
