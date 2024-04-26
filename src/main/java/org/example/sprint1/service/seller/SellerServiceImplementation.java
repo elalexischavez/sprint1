@@ -2,9 +2,7 @@ package org.example.sprint1.service.seller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import org.example.sprint1.dto.PostDTO;
-import org.example.sprint1.dto.RequestPostDTO;
-import org.example.sprint1.dto.ResponsePostDTO;
+import org.example.sprint1.dto.*;
 import org.example.sprint1.entity.Customer;
 import org.example.sprint1.entity.Post;
 import org.example.sprint1.entity.Seller;
@@ -87,6 +85,62 @@ public class SellerServiceImplementation implements ISellerService {
             listPostDto.sort(Comparator.comparing(PostDTO::getDate).reversed());
 
         return new ResponsePostDTO(userId, listPostDto);
+    }
+
+    @Override
+    public Post addProductPromo(RequestPostPromoDTO promoDTO) {
+
+//        Revisar si existe el Usuario
+        Seller seller = sellerRepository.getSellerById(promoDTO.getUserId());
+        if (seller == null) {
+            throw new NotFoundException("No existe un Vendedor con ese ID");
+        }
+//        Crear objeto Post a partir de RequestPostDTO
+        Post post = mapper.convertValue(promoDTO,Post.class);
+//        Revisar que el Id del producto no exista en ningun vendedor
+        boolean idExists = sellerRepository.productIdExists(post.getProduct().getProductId());
+        if(idExists){
+            throw new BadRequestException("El ID del producto ya existe");
+        }
+//        Asignar un Post ID
+        int uuid = Math.abs(UUID.randomUUID().hashCode());
+        post.setPostId(uuid);
+        if (sellerRepository.postIdExist(post.getPostId())){
+            throw new BadRequestException("El ID de la publicacion ya existe");
+        }
+//        Agregar post al listado de sellers
+        seller.getPosts().add(post);
+        return post;
+    }
+
+    @Override
+    public ResponseCountPromoDTO getCountProductsPromo(int userId) {
+        // Obtiene customer con userId
+        Seller seller = sellerRepository.getSellerById(userId);
+        if(seller == null){
+            throw new NotFoundException("No existe un Vendedor con ese ID");
+        }
+        List<Post> hasPromo = seller.getPosts().stream().filter(Post::isHasPromo).toList();
+        if(hasPromo.isEmpty()){throw new NotFoundException("No existe un Vendedor con ese ID");}
+        ResponseCountPromoDTO responseCountPromoDTO = new ResponseCountPromoDTO(
+                userId,
+                hasPromo.toString(),
+                hasPromo.size()
+        );
+        return responseCountPromoDTO;
+    }
+
+    @Override
+    public List<Post> getHalfPriceProductsPromo(int userId) {
+        // Obtiene customer con userId
+        Seller seller = sellerRepository.getSellerById(userId);
+        if(seller == null){
+            throw new NotFoundException("No existe un Vendedor con ese ID");
+        }
+        List<Post> hasPromo = seller.getPosts().stream().filter(Post::isHasPromo).filter(post ->
+                post.getDiscount() >= 0.5).toList();
+        if(hasPromo.isEmpty()){throw new NotFoundException("No existe un Vendedor con ese ID");}
+        return hasPromo;
     }
 
 
