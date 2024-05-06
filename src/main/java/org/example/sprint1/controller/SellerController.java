@@ -1,6 +1,7 @@
 package org.example.sprint1.controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import org.example.sprint1.dto.RequestPostDTO;
 import org.example.sprint1.dto.ResponsePostDTO;
 import org.example.sprint1.entity.Seller;
@@ -18,12 +19,12 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/products")
+@Validated
 public class SellerController {
 
     @Autowired
     ISellerService postService;
 
-    @Validated
     @PostMapping("/post")
     public ResponseEntity<Void> addPost(@Valid @RequestBody RequestPostDTO postDTO, BindingResult result){
         if(result.hasErrors()){
@@ -39,7 +40,7 @@ public class SellerController {
 
     @GetMapping("/followed/{userId}/list")
     public ResponseEntity<ResponsePostDTO> getPostsFromFollowingWithTwoWeeksOld(
-            @PathVariable int userId,
+            @Min(1) @PathVariable int userId,
             @RequestParam(required = false) String order
     ) {
         return new ResponseEntity<>(postService.getPostsFromFollowingWithTwoWeeksOld(userId, order), HttpStatus.OK);

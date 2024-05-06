@@ -25,6 +25,7 @@ public class SellerServiceImplementation implements ISellerService {
     ICustomerRepository customerRepository;
 
     private final static String ORDER_ASC = "date_asc";
+    private final static String ORDER_DESC = "date_desc";
 
     ObjectMapper mapper = new ObjectMapper();
 
@@ -79,14 +80,9 @@ public class SellerServiceImplementation implements ISellerService {
 
         // Convierte el map en list de PostDto para poder generar un ResponsePostDTO
         List<PostDTO> listPostDto = mappingPostToPostDto(postsByFollowing);
+        List<PostDTO> listOrderedPostDto = orderBy(order, listPostDto);
 
-        // Ordenamos la lista según el query param
-        if(ORDER_ASC.equals(order))
-            listPostDto.sort(Comparator.comparing(PostDTO::getDate));
-        else
-            listPostDto.sort(Comparator.comparing(PostDTO::getDate).reversed());
-
-        return new ResponsePostDTO(userId, listPostDto);
+        return new ResponsePostDTO(userId, listOrderedPostDto);
     }
 
 
@@ -107,5 +103,25 @@ public class SellerServiceImplementation implements ISellerService {
         }
 
         return listPostDto;
+    }
+
+    private List<PostDTO> orderBy(String order, List<PostDTO> posts) {
+        if(order == null)
+            return posts;
+
+        switch (order) {
+            case ORDER_ASC:
+                posts.sort(Comparator.comparing(PostDTO::getDate));
+                break;
+
+            case ORDER_DESC:
+                posts.sort(Comparator.comparing(PostDTO::getDate).reversed());
+                break;
+
+            default:
+                throw new BadRequestException("Orden no encontrado");
+        }
+
+        return posts;
     }
 }
