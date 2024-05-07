@@ -38,7 +38,7 @@ public class FollowService implements IFollowService {
 
 
     @Override
-    public CountFollowersDTO countFollowers(int sellerId) {
+    public CountFollowersDTO countFollowers(Integer sellerId) {
         Seller seller = sellerRepository.getSellerById(sellerId);
         if(seller == null){
             throw new NotFoundException("Vendedor no encontrado");
@@ -50,7 +50,7 @@ public class FollowService implements IFollowService {
 
 
     @Override
-    public void unfollowSeller(int userId, int userIdToFollow) {
+    public void unfollowSeller(Integer userId, Integer userIdToFollow) {
         Seller seller = sellerRepository.getSellerById(userIdToFollow);
         Customer customer = customerRepository.findCustomerById(userId);
         if(seller == null){
