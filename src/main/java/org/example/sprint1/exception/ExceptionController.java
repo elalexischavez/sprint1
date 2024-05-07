@@ -1,13 +1,13 @@
 package org.example.sprint1.exception;
-
 import org.example.sprint1.dto.ExceptionDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
-public class ExceptionController {
+public class ExceptionController extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<?> notFound(NotFoundException e){
