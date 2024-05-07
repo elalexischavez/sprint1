@@ -1,7 +1,6 @@
 package org.example.sprint1.controller;
 
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import org.example.sprint1.dto.SellerFollowerDto;
 import org.example.sprint1.dto.FollowedSellersDTO;
 import org.example.sprint1.service.follow.IFollowService;

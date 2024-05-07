@@ -4,6 +4,7 @@ import jakarta.validation.ConstraintViolationException;
 import org.example.sprint1.dto.ExceptionDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -40,6 +41,12 @@ public class ExceptionController {
                 .map(violation -> violation.getPropertyPath() + ": " + violation.getMessage())
                 .collect(Collectors.joining(", "));
         ExceptionDTO exceptionDto = new ExceptionDTO(errorMessage);
+        return new ResponseEntity<>(exceptionDto, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<?> handleHttpMessageNotReadable(HttpMessageNotReadableException e) {
+        ExceptionDTO exceptionDto = new ExceptionDTO("Error al leer el cuerpo de la solicitud");
         return new ResponseEntity<>(exceptionDto, HttpStatus.BAD_REQUEST);
     }
 }
