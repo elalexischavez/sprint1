@@ -8,9 +8,9 @@ import org.example.sprint1.dto.FollowedSellersDTO;
 public interface IFollowService {
     void userIdToFollow(int userId,int userIdToFollow);
 
-    CountFollowersDTO countFollowers(int sellerId);
+    CountFollowersDTO countFollowers(Integer sellerId);
 
-    void unfollowSeller(int userId, int userIdToUnfollow);
+    void unfollowSeller(Integer userId, Integer userIdToUnfollow);
 
     SellerFollowerDto getSellerFollowers(int userId, String order);
 

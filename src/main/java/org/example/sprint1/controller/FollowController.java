@@ -1,6 +1,7 @@
 package org.example.sprint1.controller;
 
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import org.example.sprint1.dto.SellerFollowerDto;
 import org.example.sprint1.dto.FollowedSellersDTO;
 import org.example.sprint1.service.follow.IFollowService;
@@ -24,12 +25,15 @@ public class FollowController {
         return new ResponseEntity<>("follow exitoso" , HttpStatus.OK);
     }
     @GetMapping("/{userId}/followers/count")
-    ResponseEntity<?> countFollowers(@PathVariable int userId) {
+    ResponseEntity<?> countFollowers(
+            @PathVariable @NotNull(message = "El  id no puede estar vacío.") @Min(value = 1, message = "El id debe ser mayor a cero")  Integer userId) {
         return new ResponseEntity<>(followService.countFollowers(userId), HttpStatus.OK);
     }
 
     @PostMapping("/{userId}/unfollow/{userIdToUnfollow}")
-    ResponseEntity<?> unfollowSeller(@PathVariable int userId,@PathVariable int userIdToUnfollow) {
+    ResponseEntity<?> unfollowSeller(
+            @PathVariable @NotNull(message = "El  id no puede estar vacío.") @Min(value = 1, message = "El id debe ser mayor a cero") Integer userId,
+            @PathVariable @NotNull(message = "El  id no puede estar vacío.") @Min(value = 1, message = "El id debe ser mayor a cero") Integer userIdToUnfollow) {
         followService.unfollowSeller(userId,userIdToUnfollow);
         return new ResponseEntity<>("", HttpStatus.OK);
     }
