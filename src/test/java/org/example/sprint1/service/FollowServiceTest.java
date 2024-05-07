@@ -216,11 +216,11 @@ public class FollowServiceTest {
                 new Seller(3, "Diego", null, null)
         );
 
-        List<BasicSellerDTO> sellersFollowed = List.of(
+        List<BasicSellerDTO> sellersFollowed = Stream.of(
                         new BasicSellerDTO(1, "Juan", null, null),
                         new BasicSellerDTO(2, "Andres", null, null),
                         new BasicSellerDTO(3, "Diego", null, null)
-                ).stream()
+                )
                 .sorted(Comparator.comparing(BasicSellerDTO::getSellerName).reversed()).collect(Collectors.toList());;
 
         List<Integer> sellersIdFollowed = List.of(1, 2, 3);
@@ -246,4 +246,79 @@ public class FollowServiceTest {
         // Assert
         Assertions.assertEquals(expectedResponse, response);
     }
+
+    @Test
+    @DisplayName("Validate getSellerFollowed with valid order")
+    public void GetSellerFollowedWithValidOrderTest() {
+        // Arrange
+        List<Seller> sellers = List.of(
+                new Seller(1, "Juan", null, null),
+                new Seller(2, "Andres", null, null),
+                new Seller(3, "Diego", null, null)
+        );
+
+        List<BasicSellerDTO> sellersFollowed = Stream.of(
+                        new BasicSellerDTO(1, "Juan", null, null),
+                        new BasicSellerDTO(2, "Andres", null, null),
+                        new BasicSellerDTO(3, "Diego", null, null)
+                )
+                .sorted(Comparator.comparing(BasicSellerDTO::getSellerName).reversed()).collect(Collectors.toList());;
+
+        List<Integer> sellersIdFollowed = List.of(1, 2, 3);
+
+        Customer customer = new Customer();
+        customer.setUserId(1);
+        customer.setUserName("Customer1");
+        customer.setSellers(sellersIdFollowed);
+
+        FollowedSellersDTO expectedResponse = new FollowedSellersDTO();
+        expectedResponse.setUserId(customer.getUserId());
+        expectedResponse.setCustomerName(customer.getUserName());
+
+
+        // Act
+        when(customerRepository.findCustomerById(1)).thenReturn(customer);
+        when(sellerRepository.getCustomersThatFollowsSellersById(anyInt())).thenReturn(sellers);
+
+
+        // Assert
+        assertDoesNotThrow(() -> followService.getFollowedSellers(1, "name_asc"));
+        assertDoesNotThrow(() -> followService.getFollowedSellers(1, "name_desc"));
+    }
+
+    @Test
+    public void testGetFollowedSellersWithInvalidOrder() {
+        // Arrange
+        List<Seller> sellers = List.of(
+                new Seller(1, "Juan", null, null),
+                new Seller(2, "Andres", null, null),
+                new Seller(3, "Diego", null, null)
+        );
+
+        List<BasicSellerDTO> sellersFollowed = Stream.of(
+                        new BasicSellerDTO(1, "Juan", null, null),
+                        new BasicSellerDTO(2, "Andres", null, null),
+                        new BasicSellerDTO(3, "Diego", null, null)
+                )
+                .sorted(Comparator.comparing(BasicSellerDTO::getSellerName).reversed()).collect(Collectors.toList());;
+
+        List<Integer> sellersIdFollowed = List.of(1, 2, 3);
+
+        Customer customer = new Customer();
+        customer.setUserId(1);
+        customer.setUserName("Customer1");
+        customer.setSellers(sellersIdFollowed);
+
+        FollowedSellersDTO expectedResponse = new FollowedSellersDTO();
+        expectedResponse.setUserId(customer.getUserId());
+        expectedResponse.setCustomerName(customer.getUserName());
+
+        // Act
+        when(customerRepository.findCustomerById(1)).thenReturn(customer);
+        when(sellerRepository.getCustomersThatFollowsSellersById(anyInt())).thenReturn(sellers);
+
+        // Assert
+        assertThrows(BadRequestException.class, () -> followService.getFollowedSellers(1, "invalid_order"));
+    }
+
 }
