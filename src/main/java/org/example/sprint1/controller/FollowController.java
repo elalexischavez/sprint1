@@ -20,7 +20,8 @@ public class FollowController {
     IFollowService followService;
 
     @PostMapping("/{userId}/follow/{userIdToFollow}")
-    ResponseEntity<?> userIdToFollow(@PathVariable int userId, @PathVariable int userIdToFollow) {
+    ResponseEntity<?> userIdToFollow(@PathVariable @Min(value = 1, message = "Debe ser un valor positivo") int userId,
+                                     @PathVariable @Min(value = 1, message = "Debe ser un valor positivo") int userIdToFollow) {
         followService.userIdToFollow(userId, userIdToFollow);
         return new ResponseEntity<>("follow exitoso" , HttpStatus.OK);
     }
