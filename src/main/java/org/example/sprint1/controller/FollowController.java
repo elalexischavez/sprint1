@@ -1,14 +1,17 @@
 package org.example.sprint1.controller;
 
+import jakarta.validation.constraints.Min;
 import org.example.sprint1.dto.SellerFollowerDto;
 import org.example.sprint1.dto.FollowedSellersDTO;
 import org.example.sprint1.service.follow.IFollowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@Validated
 @RequestMapping("/users")
 public class FollowController {
 
@@ -32,12 +35,16 @@ public class FollowController {
     }
 
     @GetMapping("/{userId}/followers/list")
-    public ResponseEntity<SellerFollowerDto> getSellerFollowers(@PathVariable int userId, @RequestParam(required = false) String order) {
+    public ResponseEntity<SellerFollowerDto> getSellerFollowers(
+            @PathVariable @Min(value = 1, message = "El id debe ser mayor a cero.") int userId,
+            @RequestParam(required = false) String order) {
         return new ResponseEntity<>(followService.getSellerFollowers(userId, order), HttpStatus.OK);
     }
 
     @GetMapping("/{userId}/followed/list")
-    public ResponseEntity<FollowedSellersDTO> getFollowedSellers(@PathVariable int userId, @RequestParam(required = false) String order){
+    public ResponseEntity<FollowedSellersDTO> getFollowedSellers(
+            @PathVariable @Min(value = 1, message = "El id debe ser mayor a cero.") int userId,
+            @RequestParam(required = false) String order){
         return new ResponseEntity<>(followService.getFollowedSellers(userId, order), HttpStatus.OK);
     }
 }

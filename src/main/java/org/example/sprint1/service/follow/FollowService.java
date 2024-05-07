@@ -12,6 +12,7 @@ import org.example.sprint1.exception.NotFoundException;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Comparator;
+import java.util.function.Function;
 import java.util.stream.Stream;
 import java.util.stream.Collectors;
 
@@ -65,22 +66,30 @@ public class FollowService implements IFollowService {
         seller.getFollowers().removeIf(followerId -> followerId == userId);
     }
 
+    private <T> List<T> sortList(List<T> list, String order, Function<T, String> getName) {
+        if ("name_asc".equals(order)) {
+            return list.stream().sorted(Comparator.comparing(getName)).collect(Collectors.toList());
+        } else if ("name_desc".equals(order)) {
+            return list.stream().sorted(Comparator.comparing(getName).reversed()).collect(Collectors.toList());
+        }
+        return list;
+    }
+
     @Override
     public SellerFollowerDto getSellerFollowers(int userId, String order) {
         ObjectMapper mapper = new ObjectMapper();
         Seller seller =  sellerRepository.getSellerById(userId);
 
-        Stream<BasicCustomerDto> customerStream = customerRepository.getCustomersThatFollowsSellersById(userId)
+        List<BasicCustomerDto> customers = customerRepository.getCustomersThatFollowsSellersById(userId)
                 .stream()
-                .map(v -> mapper.convertValue(v, BasicCustomerDto.class));
+                .map(v -> mapper.convertValue(v, BasicCustomerDto.class))
+                .collect(Collectors.toList());
 
-        if ("name_asc".equals(order)) {
-            customerStream = customerStream.sorted(Comparator.comparing(BasicCustomerDto::getUserName));
-        } else if ("name_desc".equals(order)) {
-            customerStream = customerStream.sorted(Comparator.comparing(BasicCustomerDto::getUserName).reversed());
-        }
-        return new SellerFollowerDto(userId, seller.getSellerName(), customerStream.toList());
+        customers = sortList(customers, order, BasicCustomerDto::getUserName);
+
+        return new SellerFollowerDto(userId, seller.getSellerName(), customers);
     }
+
     @Override
     public FollowedSellersDTO getFollowedSellers(int userId, String order) {
         ObjectMapper mapper = new ObjectMapper();
@@ -91,11 +100,7 @@ public class FollowService implements IFollowService {
         List<BasicSellerDTO> sellers = sellerRepository.getCustomersThatFollowsSellersById(userId)
                 .stream().map( v -> mapper.convertValue(v, BasicSellerDTO.class)).collect(Collectors.toList());
 
-        if ("name_asc".equals(order)) {
-            sellers.sort(Comparator.comparing(BasicSellerDTO::getSellerName));
-        } else if ("name_desc".equals(order)) {
-            sellers.sort(Comparator.comparing(BasicSellerDTO::getSellerName).reversed());
-        }
+        sellers = sortList(sellers, order, BasicSellerDTO::getSellerName);
 
         return new FollowedSellersDTO(userId, customer.getUserName(), sellers);
     }
