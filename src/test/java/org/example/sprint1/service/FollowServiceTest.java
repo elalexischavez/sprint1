@@ -1,5 +1,8 @@
 package org.example.sprint1.service;
 
+import org.example.sprint1.dto.SellerFollowerDto;
+import org.example.sprint1.entity.Customer;
+import org.example.sprint1.entity.Seller;
 import org.example.sprint1.exception.BadRequestException;
 import org.example.sprint1.repository.ICustomerRepository;
 import org.example.sprint1.repository.ISellerRepository;
@@ -12,6 +15,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
 
@@ -54,5 +60,99 @@ public class FollowServiceTest {
         when(customerRepository.userIdToFollowCustomer(200, 101)).thenReturn(true);
 
         Assertions.assertThrows(BadRequestException.class, () -> followService.userIdToFollow(200, 101));
+    }
+
+    @Test
+    @DisplayName("Validate getSellerFollowers with valid order")
+    public void testGetSellerFollowersWithValidOrder() {
+        // Arrange
+        Seller seller = new Seller();
+        seller.setSellerName("seller1");
+        when(sellerRepository.getSellerById(anyInt())).thenReturn(seller);
+
+        Customer customer1 = new Customer();
+        customer1.setUserId(1);
+        customer1.setUserName("customer1");
+        customer1.setSellers(Arrays.asList(1, 2, 3));
+
+        Customer customer2 = new Customer();
+        customer2.setUserId(2);
+        customer2.setUserName("customer2");
+        customer2.setSellers(Arrays.asList(4, 5, 6));
+
+        when(customerRepository.getCustomersThatFollowsSellersById(anyInt())).thenReturn(Arrays.asList(customer1, customer2));
+
+        // Act
+        assertDoesNotThrow(() -> followService.getSellerFollowers(1, "name_asc"));
+        assertDoesNotThrow(() -> followService.getSellerFollowers(1, "name_desc"));
+    }
+
+    @Test
+    @DisplayName("Validate getSellerFollowers with valid order")
+    public void testGetSellerFollowersWithInvalidOrder() {
+        // Arrange
+        Seller seller = new Seller();
+        seller.setSellerName("seller1");
+        when(sellerRepository.getSellerById(anyInt())).thenReturn(seller);
+        when(customerRepository.getCustomersThatFollowsSellersById(anyInt())).thenReturn(Arrays.asList(new Customer(), new Customer()));
+
+        // Act and Assert
+        assertThrows(BadRequestException.class, () -> followService.getSellerFollowers(1, "invalid_order"));
+    }
+
+    @Test
+    @DisplayName("Validate getSellerFollowers sorting by name ascending")
+    public void testGetSellerFollowersWithAscendingOrder() {
+        // Arrange
+        Seller seller = new Seller();
+        seller.setSellerName("seller1");
+        when(sellerRepository.getSellerById(anyInt())).thenReturn(seller);
+
+        Customer customer1 = new Customer();
+        customer1.setUserId(1);
+        customer1.setUserName("customerB");
+        customer1.setSellers(Arrays.asList(1, 2, 3));
+
+        Customer customer2 = new Customer();
+        customer2.setUserId(2);
+        customer2.setUserName("customerA");
+        customer2.setSellers(Arrays.asList(4, 5, 6));
+
+        when(customerRepository.getCustomersThatFollowsSellersById(anyInt())).thenReturn(Arrays.asList(customer1, customer2));
+
+        // Act
+        SellerFollowerDto result = followService.getSellerFollowers(1, "name_asc");
+
+        // Assert
+        assertEquals("customerA", result.getFollowers().get(0).getUserName());
+        assertEquals("customerB", result.getFollowers().get(1).getUserName());
+    }
+
+    @Test
+    @DisplayName("Validate getSellerFollowers sorting by name descending")
+    public void testGetSellerFollowersWithDescendingOrder() {
+        // Arrange
+        Seller seller = new Seller();
+        seller.setSellerName("seller1");
+        when(sellerRepository.getSellerById(anyInt())).thenReturn(seller);
+
+        Customer customer1 = new Customer();
+        customer1.setUserId(1);
+        customer1.setUserName("customerA");
+        customer1.setSellers(Arrays.asList(1, 2, 3));
+
+        Customer customer2 = new Customer();
+        customer2.setUserId(2);
+        customer2.setUserName("customerB");
+        customer2.setSellers(Arrays.asList(4, 5, 6));
+
+        when(customerRepository.getCustomersThatFollowsSellersById(anyInt())).thenReturn(Arrays.asList(customer1, customer2));
+
+        // Act
+        SellerFollowerDto result = followService.getSellerFollowers(1, "name_desc");
+
+        // Assert
+        assertEquals("customerB", result.getFollowers().get(0).getUserName());
+        assertEquals("customerA", result.getFollowers().get(1).getUserName());
     }
 }
