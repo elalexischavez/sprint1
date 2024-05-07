@@ -71,23 +71,26 @@ public class FollowService implements IFollowService {
     }
 
     private <T> List<T> sortList(List<T> list, String order, Function<T, String> getName) {
+        if (order == null) {
+            return list;
+        }
         if ("name_asc".equals(order)) {
             return list.stream().sorted(Comparator.comparing(getName)).collect(Collectors.toList());
         } else if ("name_desc".equals(order)) {
             return list.stream().sorted(Comparator.comparing(getName).reversed()).collect(Collectors.toList());
+        } else {
+            throw new BadRequestException("Orden no válido: " + order);
         }
-        return list;
     }
 
     @Override
     public SellerFollowerDto getSellerFollowers(int userId, String order) {
         ObjectMapper mapper = new ObjectMapper();
         Seller seller =  sellerRepository.getSellerById(userId);
+        if(seller == null) throw new NotFoundException("Vendedor no encontrado");
 
         List<BasicCustomerDto> customers = customerRepository.getCustomersThatFollowsSellersById(userId)
-                .stream()
-                .map(v -> mapper.convertValue(v, BasicCustomerDto.class))
-                .collect(Collectors.toList());
+                .stream().map(v -> mapper.convertValue(v, BasicCustomerDto.class)).collect(Collectors.toList());
 
         customers = sortList(customers, order, BasicCustomerDto::getUserName);
 
