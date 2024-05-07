@@ -1,9 +1,12 @@
 package org.example.sprint1.service;
 
+import jakarta.validation.ConstraintViolationException;
 import org.example.sprint1.dto.PostDTO;
 import org.example.sprint1.dto.ResponsePostDTO;
 import org.example.sprint1.entity.Customer;
 import org.example.sprint1.entity.Post;
+import org.example.sprint1.exception.BadRequestException;
+import org.example.sprint1.exception.NotFoundException;
 import org.example.sprint1.repository.ICustomerRepository;
 import org.example.sprint1.repository.ISellerRepository;
 import org.example.sprint1.service.seller.SellerServiceImplementation;
@@ -17,11 +20,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,44 +36,116 @@ public class SellerServiceTest {
     @InjectMocks
     SellerServiceImplementation sellerServiceImplementation;
 
-    ResponsePostDTO responsePostDTO;
+    ResponsePostDTO responsePostDTOAsc;
+    ResponsePostDTO responsePostDTODesc;
+    Customer customer;
+    Map<Integer, List<Post>> postsMap = new HashMap<>();
 
     @BeforeEach
-    public void setUp() {
+    public void setup() {
+        int userId = 1;
         List<PostDTO> postDTOS = new ArrayList<>();
         postDTOS.add(PostDTO.builder()
                 .sellerId(2)
-                .postId(1)
-                .date(LocalDate.of(2023, 1, 1))
+                .postId(100)
+                .date(LocalDate.of(2024, 4, 30))
+                .category(1000)
                 .price(1000)
-                .build());
+                .build()
+        );
 
-        responsePostDTO = new ResponsePostDTO(1, postDTOS);
+        postDTOS.add(PostDTO.builder()
+                .sellerId(3)
+                .postId(101)
+                .date(LocalDate.of(2024, 5, 2))
+                .category(2000)
+                .price(1000)
+                .build()
+        );
+
+        List<PostDTO> reversedPostDTOS = new ArrayList<>(postDTOS);
+        Collections.reverse(reversedPostDTOS);
+
+        responsePostDTOAsc = new ResponsePostDTO(userId, postDTOS);
+        responsePostDTODesc = new ResponsePostDTO(userId, reversedPostDTOS);
+
+
+        customer = Customer.builder()
+                .userId(1)
+                .userName("Juan")
+                .sellers(Arrays.asList(2, 3))
+                .build();
+
+        postsMap.put(2, List.of(
+                        Post.builder()
+                                .postId(100)
+                                .date(LocalDate.of(2024, 4, 30))
+                                .category(1000)
+                                .price(1000)
+                                .build()
+                )
+        );
+
+        postsMap.put(3, List.of(
+                        Post.builder()
+                                .postId(101)
+                                .date(LocalDate.of(2024, 5, 2))
+                                .category(2000)
+                                .price(1000)
+                                .build()
+                )
+        );
     }
-
 
     @Test
     @DisplayName("Verificar que el tipo de ordenamiento por fecha exista")
-    public void getPostsFromFollowingWithTwoWeeksOldTest() {
-        // Arrange
-        List<Integer> sellersIds = new ArrayList<>();
-        sellersIds.add(2);
-        sellersIds.add(3);
-        sellersIds.add(4);
-
-        Customer customer = new Customer();
-        customer.setUserId(1);
-
-        Map<Integer, List<Post>> postsMap = new HashMap<>();
-//        postsMap.put(1, new Post());
-
+    public void checkDateOrderExistsTest() {
         // Act
         when(customerRepository.findCustomerById(1)).thenReturn(customer);
         when(sellerRepository.findPostsByFollowing(customer.getSellers())).thenReturn(postsMap);
 
-        ResponsePostDTO responseReal =  sellerServiceImplementation.getPostsFromFollowingWithTwoWeeksOld(1, "date_asc");
+        // Assert
+        ResponsePostDTO responseDateAsc = sellerServiceImplementation.getPostsFromFollowingWithTwoWeeksOld(1, "date_asc");
+        ResponsePostDTO responseDateDesc = sellerServiceImplementation.getPostsFromFollowingWithTwoWeeksOld(1, "date_desc");
+
+        Assertions.assertDoesNotThrow(() -> responseDateAsc);
+        Assertions.assertDoesNotThrow(() -> responseDateDesc);
+    }
+
+    @Test
+    @DisplayName("El ordenamiento no existe")
+    public void checkOrderExistsTest() {
+        // Act
+        when(customerRepository.findCustomerById(1)).thenReturn(customer);
+        when(sellerRepository.findPostsByFollowing(customer.getSellers())).thenReturn(postsMap);
 
         // Assert
-        Assertions.assertEquals(responsePostDTO, responseReal);
+        Assertions.assertThrows(BadRequestException.class, () -> sellerServiceImplementation.getPostsFromFollowingWithTwoWeeksOld(1, "asdf"));
+    }
+
+    @Test
+    @DisplayName("Verificar el correcto ordenamiento ascendente y descendente por fecha")
+    public void dateOrderingCorrectTest() {
+        // Act
+        when(customerRepository.findCustomerById(1)).thenReturn(customer);
+        when(sellerRepository.findPostsByFollowing(customer.getSellers())).thenReturn(postsMap);
+
+        ResponsePostDTO responseDateAsc = sellerServiceImplementation.getPostsFromFollowingWithTwoWeeksOld(1, "date_asc");
+        ResponsePostDTO responseDateDesc = sellerServiceImplementation.getPostsFromFollowingWithTwoWeeksOld(1, "date_desc");
+
+        // Assert
+        Assertions.assertEquals(responsePostDTOAsc, responseDateAsc);
+        Assertions.assertEquals(responsePostDTODesc, responseDateDesc);
+    }
+
+
+    @Test
+    @DisplayName("El id de usuario no existe")
+    public void checkUserIdExistsTest() {
+        // Act
+        when(customerRepository.findCustomerById(anyInt())).thenReturn(null);
+
+        // Assert
+        Assertions.assertThrows(NotFoundException.class, () -> sellerServiceImplementation.getPostsFromFollowingWithTwoWeeksOld(1, "date_asc"));
     }
 }
