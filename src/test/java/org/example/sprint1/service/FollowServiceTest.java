@@ -1,4 +1,4 @@
-package org.example.sprint1.sprint1.service;
+package org.example.sprint1.service;
 
 
 import org.example.sprint1.exception.BadRequestException;
