@@ -1,9 +1,11 @@
 package org.example.sprint1.service;
 
+import org.example.sprint1.dto.CountFollowersDTO;
 import org.example.sprint1.dto.SellerFollowerDto;
 import org.example.sprint1.entity.Customer;
 import org.example.sprint1.entity.Seller;
 import org.example.sprint1.exception.BadRequestException;
+import org.example.sprint1.exception.NotFoundException;
 import org.example.sprint1.repository.ICustomerRepository;
 import org.example.sprint1.repository.ISellerRepository;
 import org.example.sprint1.service.follow.FollowService;
@@ -61,7 +63,26 @@ public class FollowServiceTest {
 
         Assertions.assertThrows(BadRequestException.class, () -> followService.userIdToFollow(200, 101));
     }
-
+    @Test
+    @DisplayName("Verificar que la cantidad de seguidores de un usuario sea correcta")
+    public void testCountFollowersToUser() {
+        //Arrange
+        Seller seller = new Seller();
+        seller.setSellerId(1);
+        seller.setSellerName("ElectroJoaquin");
+        seller.setFollowers(Arrays.asList(1,2,3));
+        when(sellerRepository.getSellerById(1)).thenReturn(seller);
+        //Act and Assert
+        assertDoesNotThrow(() -> followService.countFollowers(1));
+    }
+    @Test
+    @DisplayName("Verificar cuando no se encuentra el vendedor")
+    public void testCountFollowersToUserWithNotFound() throws NotFoundException {
+        //Arrange
+        when(sellerRepository.getSellerById(anyInt())).thenReturn(null);
+        //Act and Assert
+        Assertions.assertThrows(NotFoundException.class, () -> followService.countFollowers(anyInt()));
+    }
     @Test
     @DisplayName("Validate getSellerFollowers with valid order")
     public void testGetSellerFollowersWithValidOrder() {
