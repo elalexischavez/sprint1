@@ -155,7 +155,7 @@ public class SellerServiceTest {
     }
 
     @Test
-    @DisplayName("Verificar que los post regresados sean efectivamente de las ultimas dos semanas")
+    @DisplayName("T-0008 Verificar que los post regresados sean efectivamente de las ultimas dos semanas")
     public void getPostsFromFollowingWithTwoWeeksOldTest()
     {
         ObjectMapper mapper = new ObjectMapper();
