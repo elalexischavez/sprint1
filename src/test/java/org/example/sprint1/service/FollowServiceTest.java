@@ -20,6 +20,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -70,6 +71,41 @@ public class FollowServiceTest {
 
         Assertions.assertThrows(BadRequestException.class, () -> followService.userIdToFollow(200, 101));
     }
+
+
+    @Test
+    @DisplayName("Validación correcta de que el usuario a dejar de seguir exista")
+    public void testValidUserIdToUnfollow() {
+
+        // Configurar el comportamiento esperado de los mocks
+        when(sellerRepository.getSellerById(101)).thenReturn(new Seller()); // Vendedor existe
+        when(customerRepository.findCustomerById(235)).thenReturn(new Customer()); // Cliente existe
+
+        // Ejecutar
+        followService.unfollowSeller(235, 101);
+
+        // Verificar interacciones
+        verify(sellerRepository, times(1)).getSellerById(101);
+        verify(customerRepository, times(1)).findCustomerById(235);
+    }
+
+    @Test
+    @DisplayName("Validación incorrecta de que el usuario a dejar de seguir exista")
+    public void testUnvalidUserToUnfollow() {
+        // Configurar el comportamiento esperado de los mocks
+        when(sellerRepository.getSellerById(404)).thenReturn(null); // Vendedor no existe
+        when(customerRepository.findCustomerById(235)).thenReturn(new Customer()); // Asumimos que el cliente sí existe
+
+        // Verificar que se lanza la excepción NotFoundException
+        Assertions.assertThrows(NotFoundException.class, () -> followService.unfollowSeller(235, 404));
+
+        // Verificar que los métodos fueron invocados
+        verify(sellerRepository, times(1)).getSellerById(404);
+        verify(customerRepository, times(1)).findCustomerById(235);
+    }
+
+
+
     @Test
     @DisplayName("Verificar que la cantidad de seguidores de un usuario sea correcta")
     public void testCountFollowersToUser() {

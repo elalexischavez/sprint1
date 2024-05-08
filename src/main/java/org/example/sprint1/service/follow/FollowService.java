@@ -10,6 +10,8 @@ import org.example.sprint1.entity.Customer;
 import org.example.sprint1.entity.Seller;
 import org.example.sprint1.exception.NotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Comparator;
 import java.util.function.Function;
@@ -64,8 +66,20 @@ public class FollowService implements IFollowService {
         if(customer == null){
             throw new NotFoundException("Cliente no encontrado");
         }
+
+        // Asegurar que la lista de sellers no es null antes de intentar modificarla
+        if (customer.getSellers() == null) {
+            customer.setSellers(new ArrayList<>());
+        }
+
         // Remover el sellerId de la lista de vendedores que el usuario está siguiendo
         customer.getSellers().removeIf(sellerIdFollowed -> sellerIdFollowed == userIdToFollow);
+
+        // Asegurar que la lista de followers no es null antes de intentar modificarla
+        if (seller.getFollowers() == null) {
+            seller.setFollowers(new ArrayList<>());
+        }
+
         // Remover el userId de la lista de seguidores del vendedor
         seller.getFollowers().removeIf(followerId -> followerId == userId);
     }
