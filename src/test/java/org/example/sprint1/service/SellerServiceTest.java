@@ -3,11 +3,11 @@ package org.example.sprint1.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import jakarta.validation.ConstraintViolationException;
 import org.example.sprint1.dto.PostDTO;
 import org.example.sprint1.dto.ResponsePostDTO;
 import org.example.sprint1.entity.Customer;
 import org.example.sprint1.entity.Post;
+import org.example.sprint1.entity.Seller;
 import org.example.sprint1.exception.BadRequestException;
 import org.example.sprint1.exception.NotFoundException;
 import org.example.sprint1.repository.ICustomerRepository;
@@ -25,7 +25,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.util.*;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -137,8 +139,8 @@ public class SellerServiceTest {
         ResponsePostDTO responseDateDesc = sellerServiceImplementation.getPostsFromFollowingWithTwoWeeksOld(1, "date_desc");
 
         // Assert
-        Assertions.assertEquals(responsePostDTOAsc, responseDateAsc);
-        Assertions.assertEquals(responsePostDTODesc, responseDateDesc);
+        assertEquals(responsePostDTOAsc, responseDateAsc);
+        assertEquals(responsePostDTODesc, responseDateDesc);
     }
 
 
@@ -150,6 +152,36 @@ public class SellerServiceTest {
 
         // Assert
         Assertions.assertThrows(NotFoundException.class, () -> sellerServiceImplementation.getPostsFromFollowingWithTwoWeeksOld(1, "date_asc"));
+    }
+
+    @Test
+    @DisplayName("Verificar que los post regresados sean efectivamente de las ultimas dos semanas")
+    public void getPostsFromFollowingWithTwoWeeksOldTest()
+    {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+
+        // Arrange
+        Customer customer = new Customer(1, "Alexis", List.of(1));
+        Seller seller = new Seller();
+        seller.setSellerId(1);
+
+        PostDTO postDTO2 = new PostDTO();
+        postDTO2.setDate(LocalDate.now());
+
+        Map<Integer, List<Post>> x = new HashMap<>();
+        x.put(seller.getSellerId(), List.of(mapper.convertValue(postDTO2, Post.class)));
+
+        ResponsePostDTO expectedResponse = new ResponsePostDTO(seller.getSellerId(), List.of(postDTO2));
+
+        // Act
+        when(customerRepository.findCustomerById(anyInt())).thenReturn(customer);
+        when(sellerRepository.findPostsByFollowing(anyList())).thenReturn(x);
+        ResponsePostDTO response = sellerServiceImplementation.getPostsFromFollowingWithTwoWeeksOld(customer.getUserId(), null);
+
+        // Assert
+        assertEquals(expectedResponse.getPosts().size(), response.getPosts().size());
+
     }
 
 }
