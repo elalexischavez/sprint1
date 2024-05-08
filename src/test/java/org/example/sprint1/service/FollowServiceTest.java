@@ -43,7 +43,7 @@ public class FollowServiceTest {
     FollowService followService;
 
     @Test
-    @DisplayName("validar la correctamente follow")
+    @DisplayName("T-0001 validar correctamente follow")
     public void validateSuccessfullyFollow() {
         when(sellerRepository.userIdToFollowSeller(235, 101)).thenReturn(false);
         when(customerRepository.userIdToFollowCustomer(235, 101)).thenReturn(false);
@@ -55,7 +55,7 @@ public class FollowServiceTest {
     }
 
     @Test
-    @DisplayName("validar de forma incorrecta vendedor de follow")
+    @DisplayName("T-0001 validar de forma incorrecta vendedor de follow")
     public void validateIncorrectlySellerFollow() throws BadRequestException {
         when(sellerRepository.userIdToFollowSeller(235, 90)).thenReturn(true);
         when(customerRepository.userIdToFollowCustomer(235, 90)).thenReturn(false);
@@ -64,7 +64,7 @@ public class FollowServiceTest {
     }
 
     @Test
-    @DisplayName("validar de forma incorrecta comprador de follow")
+    @DisplayName("T-0001 validar de forma incorrecta comprador de follow")
     public void validateIncorrectlyBuyerFollow() throws BadRequestException {
         when(sellerRepository.userIdToFollowSeller(200, 101)).thenReturn(false);
         when(customerRepository.userIdToFollowCustomer(200, 101)).thenReturn(true);
@@ -74,7 +74,7 @@ public class FollowServiceTest {
 
 
     @Test
-    @DisplayName("Validación correcta de que el usuario a dejar de seguir exista")
+    @DisplayName("T-0002 Validación correcta de que el usuario a dejar de seguir exista")
     public void testValidUserIdToUnfollow() {
 
         // Configurar el comportamiento esperado de los mocks
@@ -90,7 +90,7 @@ public class FollowServiceTest {
     }
 
     @Test
-    @DisplayName("Validación incorrecta de que el usuario a dejar de seguir exista")
+    @DisplayName("T-0002 Validación incorrecta de que el usuario a dejar de seguir exista")
     public void testUnvalidUserToUnfollow() {
         // Configurar el comportamiento esperado de los mocks
         when(sellerRepository.getSellerById(404)).thenReturn(null); // Vendedor no existe
@@ -107,7 +107,7 @@ public class FollowServiceTest {
 
 
     @Test
-    @DisplayName("Verificar que la cantidad de seguidores de un usuario sea correcta")
+    @DisplayName("T-0007 Verificar que la cantidad de seguidores de un usuario sea correcta")
     public void testCountFollowersToUser() {
         //Arrange
         Seller seller = new Seller();
@@ -120,7 +120,7 @@ public class FollowServiceTest {
         assertEquals(3, result.getFollowersCount());
     }
     @Test
-    @DisplayName("Verificar cuando no se encuentra el vendedor")
+    @DisplayName("T-0007 Verificar cuando no se encuentra el vendedor")
     public void testCountFollowersToUserWithNotFound() throws NotFoundException {
         //Arrange
         when(sellerRepository.getSellerById(anyInt())).thenReturn(null);
@@ -128,7 +128,7 @@ public class FollowServiceTest {
         Assertions.assertThrows(NotFoundException.class, () -> followService.countFollowers(anyInt()));
     }
     @Test
-    @DisplayName("Validate getSellerFollowers with valid order")
+    @DisplayName("T-0003 Validar el ordenamiento exista")
     public void testGetSellerFollowersWithValidOrder() {
         // Arrange
         Seller seller = new Seller();
@@ -153,7 +153,7 @@ public class FollowServiceTest {
     }
 
     @Test
-    @DisplayName("Validate getSellerFollowers with valid order")
+    @DisplayName("T-0003 Validar la excepcion de un prdenamiento innexistente")
     public void testGetSellerFollowersWithInvalidOrder() {
         // Arrange
         Seller seller = new Seller();
@@ -166,7 +166,7 @@ public class FollowServiceTest {
     }
 
     @Test
-    @DisplayName("Validate getSellerFollowers sorting by name ascending")
+    @DisplayName("T-0004 Validar el ordenamiento ascendente")
     public void testGetSellerFollowersWithAscendingOrder() {
         // Arrange
         Seller seller = new Seller();
@@ -194,7 +194,7 @@ public class FollowServiceTest {
     }
 
     @Test
-    @DisplayName("Validate getSellerFollowers sorting by name descending")
+    @DisplayName("T-0004 Validar el ordenamiento descendente")
     public void testGetSellerFollowersWithDescendingOrder() {
         // Arrange
         Seller seller = new Seller();
@@ -222,7 +222,7 @@ public class FollowServiceTest {
     }
 
     @Test
-    @DisplayName("Validar que el orden de la lista de los vendedores que un usuario sigue este ASC")
+    @DisplayName("T-0004 Validar que el orden de la lista de los vendedores que un usuario sigue este ASC")
     public void getFollowedSellersTestAsc() {
 
         // Arrange
@@ -264,7 +264,7 @@ public class FollowServiceTest {
     }
 
     @Test
-    @DisplayName("Validar que el orden de la lista de los vendedores que un usuario sigue este DESC")
+    @DisplayName("T-0004 Validar que el orden de la lista de los vendedores que un usuario sigue este DESC")
     public void getFollowedSellersTestDesc() {
 
         // Arrange
@@ -306,7 +306,7 @@ public class FollowServiceTest {
     }
 
     @Test
-    @DisplayName("Validate getSellerFollowed with valid order")
+    @DisplayName("T-0003 Validar getSellerFollowed con orden valido")
     public void getSellerFollowedWithValidOrderTest() {
         // Arrange
         List<Seller> sellers = List.of(
@@ -345,6 +345,7 @@ public class FollowServiceTest {
     }
 
     @Test
+    @DisplayName("T-0003 Validar getSellerFollowed con orden invalido")
     public void testGetFollowedSellersWithInvalidOrder() {
         // Arrange
         List<Seller> sellers = List.of(

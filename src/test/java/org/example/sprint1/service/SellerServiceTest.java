@@ -101,7 +101,7 @@ public class SellerServiceTest {
     }
 
     @Test
-    @DisplayName("Verificar que el tipo de ordenamiento por fecha exista")
+    @DisplayName("T-0005 Verificar que el tipo de ordenamiento por fecha exista")
     public void checkDateOrderExistsTest() {
         // Act
         when(customerRepository.findCustomerById(1)).thenReturn(customer);
@@ -116,7 +116,7 @@ public class SellerServiceTest {
     }
 
     @Test
-    @DisplayName("El ordenamiento no existe")
+    @DisplayName("T-0005 Verificar que el ordenamiento por fecha no existe")
     public void checkOrderExistsTest() {
         // Act
         when(customerRepository.findCustomerById(1)).thenReturn(customer);
@@ -127,7 +127,7 @@ public class SellerServiceTest {
     }
 
     @Test
-    @DisplayName("Verificar el correcto ordenamiento ascendente y descendente por fecha")
+    @DisplayName("T-0006 Verificar el correcto ordenamiento ascendente y descendente por fecha")
     public void dateOrderingCorrectTest() {
         // Act
         when(customerRepository.findCustomerById(1)).thenReturn(customer);
@@ -143,7 +143,7 @@ public class SellerServiceTest {
 
 
     @Test
-    @DisplayName("El id de usuario no existe")
+    @DisplayName("T-0006 Verificar id de usuario no existe")
     public void checkUserIdExistsTest() {
         // Act
         when(customerRepository.findCustomerById(anyInt())).thenReturn(null);
