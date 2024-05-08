@@ -1,12 +1,9 @@
 package org.example.sprint1.service;
 
-<<<<<<< HEAD
 import org.example.sprint1.dto.CountFollowersDTO;
-=======
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.sprint1.dto.BasicSellerDTO;
 import org.example.sprint1.dto.FollowedSellersDTO;
->>>>>>> 5f25b5358be85654a2076a241d003f022737b5c2
 import org.example.sprint1.dto.SellerFollowerDto;
 import org.example.sprint1.entity.Customer;
 import org.example.sprint1.entity.Seller;
