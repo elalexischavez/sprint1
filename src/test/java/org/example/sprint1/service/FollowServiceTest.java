@@ -76,7 +76,7 @@ public class FollowServiceTest {
         //Arrange
         Seller seller = new Seller();
         seller.setSellerId(1);
-        seller.setSellerName("ElectroJoaquin");
+        seller.setSellerName("ElectreJoaquin");
         seller.setFollowers(Arrays.asList(1,2,3));
         when(sellerRepository.getSellerById(1)).thenReturn(seller);
         //Act and Assert
