@@ -30,7 +30,7 @@ public class FollowServiceTest {
 
     @Test
     @DisplayName("validar la correctamente follow")
-    public void validarCorrectamenteFollow() {
+    public void validateSuccessfullyFollow() {
         when(sellerRepository.userIdToFollowSeller(235, 101)).thenReturn(false);
         when(customerRepository.userIdToFollowCustomer(235, 101)).thenReturn(false);
 
@@ -42,7 +42,7 @@ public class FollowServiceTest {
 
     @Test
     @DisplayName("validar de forma incorrecta vendedor de follow")
-    public void validarIncorrectamenteVendedorFollow() throws BadRequestException {
+    public void validateIncorrectlySellerFollow() throws BadRequestException {
         when(sellerRepository.userIdToFollowSeller(235, 90)).thenReturn(true);
         when(customerRepository.userIdToFollowCustomer(235, 90)).thenReturn(false);
 
@@ -51,7 +51,7 @@ public class FollowServiceTest {
 
     @Test
     @DisplayName("validar de forma incorrecta comprador de follow")
-    public void validarIncorrectamenteCompradorFollow() throws BadRequestException {
+    public void validateIncorrectlyBuyerFollow() throws BadRequestException {
         when(sellerRepository.userIdToFollowSeller(200, 101)).thenReturn(false);
         when(customerRepository.userIdToFollowCustomer(200, 101)).thenReturn(true);
 

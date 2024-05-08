@@ -22,14 +22,14 @@ public class FollowControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    @DisplayName("verificar respuesta correcta is ok")
-    public void verificarRespuestaCorrecta() throws Exception {
+    @DisplayName("verificar respuesta correcta el follow is ok")
+    public void verifyCorrectFollow() throws Exception {
         followUrlTestIsOk(235, 101);
     }
 
     @Test
     @DisplayName("verificar si el vendedor no existe")
-    public void verificarSiElVendedorNoExiste() throws Exception {
+    public void checkIfTheSellerNoesNotExist() throws Exception {
         followUrlTestIsNotOk(1, 101, "comprador no encontrado");
     }
 
