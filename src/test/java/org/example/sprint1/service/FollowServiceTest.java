@@ -115,8 +115,9 @@ public class FollowServiceTest {
         seller.setSellerName("ElectroJoaquin");
         seller.setFollowers(Arrays.asList(1,2,3));
         when(sellerRepository.getSellerById(1)).thenReturn(seller);
+        CountFollowersDTO result = followService.countFollowers(1);
         //Act and Assert
-        assertDoesNotThrow(() -> followService.countFollowers(1));
+        assertEquals(3, result.getFollowersCount());
     }
     @Test
     @DisplayName("Verificar cuando no se encuentra el vendedor")
