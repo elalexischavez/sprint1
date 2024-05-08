@@ -306,7 +306,7 @@ public class FollowServiceTest {
 
     @Test
     @DisplayName("Validate getSellerFollowed with valid order")
-    public void GetSellerFollowedWithValidOrderTest() {
+    public void getSellerFollowedWithValidOrderTest() {
         // Arrange
         List<Seller> sellers = List.of(
                 new Seller(1, "Juan", null, null),
