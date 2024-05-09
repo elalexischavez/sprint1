@@ -47,6 +47,7 @@ public class SellerIntegrationTest {
         // Simula una petición HTTP GET que resulta en un vendedor no encontrado
         mockMvc.perform(get("/users/999/followers/count")
                         .contentType(MediaType.APPLICATION_JSON))
+                .andDo(print())
                 .andExpect(status().isNotFound())
                 .andExpect(result -> assertTrue(result.getResolvedException() instanceof NotFoundException))
                 .andExpect(result -> assertEquals("Vendedor no encontrado", result.getResolvedException().getMessage()));
