@@ -17,7 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/products")
 @Validated
-public class SellerController {
+public class    SellerController {
 
     @Autowired
     ISellerService postService;
